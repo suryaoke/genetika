@@ -20,7 +20,7 @@ class TeachController extends Controller
         // Query dasar yang akan digunakan untuk mencari data Teach
         $query = Teach::query();
 
-        // Filter berdasarkan nama dosen jika searchlecturers tidak kosong
+        // Filter berdasarkan nama guru jika searchlecturers tidak kosong
         if (!empty($searchLecturers)) {
             $query->whereHas('lecturer', function ($lecturerQuery) use ($searchLecturers) {
                 $lecturerQuery->where('name', 'LIKE', '%' . $searchLecturers . '%');

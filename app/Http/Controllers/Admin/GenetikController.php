@@ -6,8 +6,8 @@ use App\Algoritma\GenerateAlgoritma;
 use App\Exports\SchedulesExport;
 use App\Http\Controllers\Controller;
 use App\Models\Day;
+use App\Models\Jadwal;
 use App\Models\Lecturer;
-use App\Models\Mapel;
 use App\Models\Room;
 use App\Models\Schedule;
 use App\Models\Setting;
@@ -21,8 +21,10 @@ class GenetikController extends Controller
 {
     public function index(Request $request)
     {
-        $years = Teach::select('year')->groupBy('year')->pluck('year', 'year');
 
+
+
+        $years = Teach::select('year')->groupBy('year')->pluck('year', 'year');
         return view('admin.genetik.index', compact('years'));
     }
 
@@ -55,22 +57,64 @@ class GenetikController extends Controller
         $mutasi->save();
 
         return redirect()->route('admin.generates.result', 1);
-    }
-    public function result($id)
+    } // end method
+
+    public function result(Request $request, $id)
     {
+
+        // Bagian search Data //
+        $searchDays = $request->input('searchdays');
+        $searchLecturers = $request->input('searchlecturers');
+        $searchCourse = $request->input('searchcourse');
+        $searchClass = $request->input('searchclass');
+
+        // Query dasar yang akan digunakan untuk mencari data Teach
+        $query = Jadwal::query();
+
+        // Filter berdasarkan nama hari jika searchlecturers tidak kosong
+        if (!empty($searchDays)) {
+            $query->whereHas('day', function ($lecturerQuery) use ($searchDays) {
+                $lecturerQuery->where('name_day', 'LIKE', '%' . $searchDays . '%');
+            });
+        }
+
+        // Filter berdasarkan nama guru jika searchlecturers tidak kosong
+        if (!empty($searchLecturers)) {
+            $query->whereHas('teach', function ($teachQuery) use ($searchLecturers) {
+                $teachQuery->whereHas('lecturer', function ($courseQuery) use ($searchLecturers) {
+                    $courseQuery->where('name', 'LIKE', '%' . $searchLecturers . '%');
+                });
+            });
+        }
+
+        // Filter berdasarkan nama mata Pelajaran jika searchcourse tidak kosong
+        if (!empty($searchCourse)) {
+            $query->whereHas('teach', function ($teachQuery) use ($searchCourse) {
+                $teachQuery->whereHas('course', function ($courseQuery) use ($searchCourse) {
+                    $courseQuery->where('name', 'LIKE', '%' . $searchCourse . '%');
+                });
+            });
+        }
+
+        // Filter berdasarkan nama kelas jika searchclass tidak kosong
+        if (!empty($searchClass)) {
+            $query->whereHas('teach', function ($lecturerQuery) use ($searchClass) {
+                $lecturerQuery->where('class_room', 'LIKE', '%' . $searchClass . '%');
+            });
+        }
+        // End Bagian search Data //
+
+
+        // Menampilkan Data  Generate Jadwal//
         $years          = Teach::select('year')->groupBy('year')->pluck('year', 'year');
         $kromosom       = Schedule::select('type')->groupBy('type')->get()->count();
         $crossover      = Setting::where('key', Setting::CROSSOVER)->first();
         $mutasi         = Setting::where('key', Setting::MUTASI)->first();
         $value_schedule = Schedule::where('type', $id)->first();
-        $schedules = Schedule::join('teachs', 'schedules.teachs_id', '=', 'teachs.id')
-            ->orderBy('teachs.class_room', 'asc')
-            ->orderBy('days_id', 'desc')
-            ->orderBy('times_id', 'desc')
-            ->where('schedules.type', $id)
-            ->get();
-
-
+        $schedules = Schedule::orderBy('days_id', 'asc')
+            ->orderBy('times_id', 'asc')
+            ->where('schedules.type', $id);
+        $schedules = $query->get();
         if (empty($value_schedule)) {
             abort(404);
         }
@@ -82,10 +126,10 @@ class GenetikController extends Controller
 
             ];
         }
-
         $day = Day::all();
         $time = Time::all();
         $room = Room::all();
+
         return view('admin.genetik.result', compact('day', 'time', 'room', 'schedules', 'years', 'data_kromosom', 'id', 'value_schedule', 'crossover', 'mutasi'));
     }
 
@@ -146,21 +190,21 @@ class GenetikController extends Controller
     public function saveDataToMapel($id)
     {
         // Ambil data schedule berdasarkan tipe (type) yang diberikan dalam parameter
-        Mapel::truncate();
+        Jadwal::truncate();
 
         $schedules = Schedule::where('type', $id)->get();
 
         // Perulangan untuk menyimpan data ke tabel Mapel
         foreach ($schedules as $schedule) {
             // Buat instance baru dari model Mapel
-            $mapel = new Mapel();
+            $mapel = new Jadwal();
 
             // Set atribut-atribut yang sesuai
             $mapel->teachs_id = $schedule->teachs_id;
             $mapel->days_id = $schedule->days_id;
             $mapel->times_id = $schedule->times_id;
             $mapel->rooms_id = $schedule->rooms_id;
-
+            $mapel->status = '0';
             // Simpan data ke dalam tabel Mapel
             $mapel->save();
         }

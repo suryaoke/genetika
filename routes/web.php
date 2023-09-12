@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CoursesController;
 use App\Http\Controllers\Admin\DayController;
 use App\Http\Controllers\Admin\GenetikController;
+use App\Http\Controllers\Admin\JadwalController;
 use App\Http\Controllers\Admin\JurusanController;
 use App\Http\Controllers\Admin\LecturersController;
 use App\Http\Controllers\admin\PengajuanTimenotavailableController;
@@ -47,16 +48,30 @@ Route::group(['namespace' => 'Admin'], function () {
 });
 
 
-//generate jadwal 
+
+//Route jadwal 
+Route::controller(JadwalController::class)->group(function () {
+    Route::get('jadwal', 'all')->name('jadwal.all');
+    Route::post('jadwal/update/{id}', 'updatejadwal')->name('jadwal.update');
+    Route::get('jadwal/delete/{id}', 'destroy')->name('jadwal.delete');
+    Route::post('jadwal/upadate/status', 'updateStatus')->name('jadwal.status');
+    Route::post('jadwal/upadate/status/one/{id}', 'statusOne')->name('jadwal.status.one');
+    Route::get('jadwal/kepsek', 'allKepsek')->name('jadwal.all.kepsek');
+    Route::post('jadwal/upadate/verifikasi', 'updateVerifikasi')->name('jadwal.verifikasi');
+    Route::post('jadwal/upadate/verifikasi/one/{id}', 'verifikasiOne')->name('jadwal.verifikasi.one');
+});
+
+
+// Route generate jadwal 
 Route::controller(GenetikController::class)->group(function () {
     Route::get('generates', 'index')->name('admin.generates');
     Route::get('generates/submit', 'submit')->name('admin.generates.submit');
     Route::get('generates/result/{id}', 'result')->name('admin.generates.result');
     Route::get('generates/excel/{id}', 'excel')->name('admin.generates.excel');
-    Route::post('generates/update/{id?}', 'updatejadwal')->name('update.jadwal');
-    Route::get('generates/delete/{id?}', 'destroy')->name('jadwal.delete');
+    Route::post('generates/update/{id?}', 'updatejadwal')->name('generate.update');
+    Route::get('generates/delete/{id?}', 'destroy')->name('generate.delete');
+    Route::post('generates/save/{id?}', 'saveDataToMapel')->name('generate.save');
 });
-Route::post('/generates/save/{id}', [GenetikController::class, 'saveDataToMapel'])->name('jadwal.save');
 
 
 // Route Guru

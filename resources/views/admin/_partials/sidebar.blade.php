@@ -57,6 +57,8 @@
       $pengajuan = URL::route('admin.pengajuantimenotavailables');
       $gurupengajuan = URL::route('admin.pengajuantimenotavailables');
       $pengajuanadd = URL::route('admin.pengajuantimenotavailable.create');
+      $jadwalall = URL::route('jadwal.all');
+      $jadwalallkepsek = URL::route('jadwal.all.kepsek');
   @endphp
 
   <nav class="side-nav">
@@ -87,7 +89,7 @@
 
           </li>
 
-          {{--  // bagian Kepala Sekolah  --}}
+          {{--  // bagian Kepala Sekolah  dan wakil --}}
           @if (Auth::user()->role == '2' || Auth::user()->role == '3')
 
               <li>
@@ -121,17 +123,40 @@
                   </a>
               </li>
           @endif
-          {{--  // end bagian Kepala Sekolah  --}}
-          @if (Auth::user()->role == '2' || Auth::user()->role == '5')
+          {{--  // end bagian Kepala Sekolah  dan wakil --}}
+
+
+          {{--  // bagian Kepala Sekolah  --}}
+          @if (Auth::user()->role == '2')
               <li>
-
-                  <a href="{{ route('admin.courses') }}" class="side-menu ">
-
-                      <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
-                      <div class="side-menu__title"> Jadwal Mata Pelajaran </div>
+                  @if ($url == $jadwalallkepsek)
+                      <a href="{{ route('jadwal.all.kepsek') }}" class="side-menu  side-menu--active">
+                      @else
+                          <a href="{{ route('jadwal.all.kepsek') }}" class="side-menu ">
+                  @endif
+                  <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
+                  <div class="side-menu__title"> Jadwal Mata Pelajaran </div>
                   </a>
               </li>
           @endif
+          {{--  // end bagian Kepala Sekolah  --}}
+
+
+          {{--  // Bagian Wakil , Admin , Jurusan  --}}
+          @if (Auth::user()->role == '3' || Auth::user()->role == '1' || Auth::user()->role == '4')
+              <li>
+                  @if ($url == $jadwalall)
+                      <a href="{{ route('jadwal.all') }}" class="side-menu  side-menu--active">
+                      @else
+                          <a href="{{ route('jadwal.all') }}" class="side-menu ">
+                  @endif
+                  <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
+                  <div class="side-menu__title"> Jadwal Mata Pelajaran </div>
+                  </a>
+              </li>
+          @endif
+          {{--  // end Bagian Wakil , Admin , Jurusan  --}}
+
           {{--  // bagian Jurusan --}}
           @if (Auth::user()->role == '4')
               <li>
@@ -169,7 +194,7 @@
                   @endif
                   <div class="side-menu__icon"> <i data-lucide="calendar"></i> </div>
                   <div class="side-menu__title">
-                      Data Waktu
+                      Data
                       <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                   </div>
                   </a>
@@ -268,6 +293,17 @@
                   @endif
                   <div class="side-menu__icon"> <i data-lucide="clock"></i> </div>
                   <div class="side-menu__title"> Waktu Berhalangan </div>
+                  </a>
+              </li>
+
+              <li>
+                  @if ($url == $jadwalall)
+                      <a href="{{ route('jadwal.all') }}" class="side-menu  side-menu--active">
+                      @else
+                          <a href="{{ route('jadwal.all') }}" class="side-menu ">
+                  @endif
+                  <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
+                  <div class="side-menu__title"> Jadwal Mata Pelajaran </div>
                   </a>
               </li>
           @endif
