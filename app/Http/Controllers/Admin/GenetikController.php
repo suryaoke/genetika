@@ -69,7 +69,7 @@ class GenetikController extends Controller
         $searchClass = $request->input('searchclass');
 
         // Query dasar yang akan digunakan untuk mencari data Teach
-        $query = Jadwal::query();
+        $query = Schedule::query();
 
         // Filter berdasarkan nama hari jika searchlecturers tidak kosong
         if (!empty($searchDays)) {
@@ -111,10 +111,10 @@ class GenetikController extends Controller
         $crossover      = Setting::where('key', Setting::CROSSOVER)->first();
         $mutasi         = Setting::where('key', Setting::MUTASI)->first();
         $value_schedule = Schedule::where('type', $id)->first();
-        $schedules = Schedule::orderBy('days_id', 'asc')
+
+        $schedules = $query->orderBy('days_id', 'asc')
             ->orderBy('times_id', 'asc')
-            ->where('schedules.type', $id);
-        $schedules = $query->get();
+            ->where('schedules.type', $id)->get();
         if (empty($value_schedule)) {
             abort(404);
         }

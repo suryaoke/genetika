@@ -54,13 +54,16 @@
         </form>
     </div>
     {{--  // End Bagian search //  --}}
-    @foreach ($schedules as $key => $schedule)
-    @endforeach
+
     @if (Auth::user()->role == '3')
-        <div class="col-span-2 mb-4 ">
+        <div class="col-span-2 mb-4 mt-4">
             <a class="btn btn-primary btn-block" data-tw-toggle="modal" data-tw-target="#button-modal-preview">
-                <span class="glyphicon glyphicon-download"></span> </span> <i data-lucide="send"
+                <span class="glyphicon glyphicon-download"></span>  <i data-lucide="send"
                     class="w-4 h-4"></i>&nbsp;Kirim Jadwal All
+            </a>
+      
+            <a class="btn btn-success btn-block ml-2" data-tw-toggle="modal" data-tw-target="#button-modal-preview">
+                <span class="glyphicon glyphicon-download"></span> Tambah Jadwal
             </a>
         </div>
     @endif

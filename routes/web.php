@@ -59,7 +59,9 @@ Route::controller(JadwalController::class)->group(function () {
     Route::get('jadwal/kepsek', 'allKepsek')->name('jadwal.all.kepsek');
     Route::post('jadwal/upadate/verifikasi', 'updateVerifikasi')->name('jadwal.verifikasi');
     Route::post('jadwal/upadate/verifikasi/one/{id}', 'verifikasiOne')->name('jadwal.verifikasi.one');
+    Route::get('jadwal/guru', 'allGuru')->name('jadwal.all.guru');
 });
+
 
 
 // Route generate jadwal 
@@ -68,9 +70,9 @@ Route::controller(GenetikController::class)->group(function () {
     Route::get('generates/submit', 'submit')->name('admin.generates.submit');
     Route::get('generates/result/{id}', 'result')->name('admin.generates.result');
     Route::get('generates/excel/{id}', 'excel')->name('admin.generates.excel');
-    Route::post('generates/update/{id?}', 'updatejadwal')->name('generate.update');
-    Route::get('generates/delete/{id?}', 'destroy')->name('generate.delete');
-    Route::post('generates/save/{id?}', 'saveDataToMapel')->name('generate.save');
+    Route::post('generates/update/{id}', 'updatejadwal')->name('generate.update');
+    Route::get('generates/delete/{id}', 'destroy')->name('generate.delete');
+    Route::post('generates/save/{id}', 'saveDataToMapel')->name('generate.save');
 });
 
 
@@ -81,7 +83,7 @@ Route::controller(LecturersController::class)->group(function () {
     Route::get('lecturers/create', '@create')->name('admin.lecturer.create');
     Route::post('lecturers/create', 'store')->name('admin.lecturer.store');
     Route::get('lecturers/edit/{id}', 'edit')->name('admin.lecturer.edit');
-    Route::post('lecturers/update/{id?}', 'update')->name('admin.lecturer.update');
+    Route::post('lecturers/update/{id}', 'update')->name('admin.lecturer.update');
 });
 
 // Route Mata Pelajaran
@@ -91,7 +93,7 @@ Route::controller(CoursesController::class)->group(function () {
     Route::get('courses/create', 'create')->name('admin.courses.create');
     Route::post('courses/create', 'store')->name('admin.courses.store');
     Route::get('courses/edit/{id}', 'edit')->name('admin.courses.edit');
-    Route::post('courses/update/{id?}', 'update')->name('admin.courses.update');
+    Route::post('courses/update/{id}', 'update')->name('admin.courses.update');
 });
 
 // Route Waktu
@@ -101,7 +103,7 @@ Route::controller(TimeController::class)->group(function () {
     Route::get('times/create', 'create')->name('admin.time.create');
     Route::post('times/create', 'store')->name('admin.time.store');
     Route::get('times/edit/{id}', 'edit')->name('admin.time.edit');
-    Route::post('times/update/{id?}', 'update')->name('admin.time.update');
+    Route::post('times/update/{id}', 'update')->name('admin.time.update');
 });
 
 // Route Hari 
@@ -111,7 +113,7 @@ Route::controller(DayController::class)->group(function () {
     Route::get('days/create', 'create')->name('admin.day.create');
     Route::post('days/create', 'store')->name('admin.day.store');
     Route::get('days/edit/{id}', 'edit')->name('admin.day.edit');
-    Route::post('days/update/{id?}', 'update')->name('admin.day.update');
+    Route::post('days/update/{id}', 'update')->name('admin.day.update');
 });
 
 // Route  Waktu Berhalangan
@@ -121,7 +123,7 @@ Route::controller(TimenotavailableController::class)->group(function () {
     Route::get('timenotavailable/create', 'create')->name('admin.timenotavailable.create');
     Route::post('timenotavailable/create', 'store')->name('admin.timenotavailable.store');
     Route::get('timenotavailable/edit/{id}', 'edit')->name('admin.timenotavailable.edit');
-    Route::post('timenotavailable/update/{id?}', 'update')->name('admin.timenotavailable.updat');
+    Route::post('timenotavailable/update/{id}', 'update')->name('admin.timenotavailable.update');
 });
 
 // Route Pengajuan Waktu Berhalangan
@@ -133,7 +135,7 @@ Route::controller(PengajuanTimenotavailableController::class)->group(function ()
     Route::get('pengajuantimenotavailable/create', 'create')->name('admin.pengajuantimenotavailable.create');
     Route::post('pengajuantimenotavailable/create', 'store')->name('admin.pengajuantimenotavailable.store');
     Route::get('pengajuantimenotavailable/edit/{id}', 'edit')->name('admin.pengajuantimenotavailable.edit');
-    Route::post('pengajuantimenotavailable/update/{id?}', 'update')->name('admin.pengajuantimenotavailable.update');
+    Route::post('pengajuantimenotavailable/update/{id}', 'update')->name('admin.pengajuantimenotavailable.update');
 });
 
 // Route User
@@ -149,7 +151,7 @@ Route::controller(UserController::class)->middleware(['auth'])->group(function (
     Route::get('users/create', 'create')->name('admin.user.create');
     Route::post('users/create', 'store')->name('admin.user.store');
     Route::get('users/edit/{id}', 'edit')->name('admin.user.edit');
-    Route::post('users/update/{id?}', 'update')->name('admin.user.update');
+    Route::post('users/update/{id}', 'update')->name('admin.user.update');
 });
 
 // Route Ruangan
@@ -159,7 +161,7 @@ Route::controller(RoomsController::class)->group(function () {
     Route::get('rooms/create', 'create')->name('admin.room.create');
     Route::post('rooms/create', 'store')->name('admin.room.store');
     Route::get('rooms/edit/{id}', 'edit')->name('admin.room.edit');
-    Route::post('rooms/update/{id?}', 'update')->name('admin.room.update');
+    Route::post('rooms/update/{id}', 'update')->name('admin.room.update');
 });
 
 // Route Jurusan
@@ -169,7 +171,7 @@ Route::controller(JurusanController::class)->group(function () {
     Route::get('jurusan/create', 'create')->name('admin.jurusan.create');
     Route::post('jurusan/create', 'store')->name('admin.jurusan.store');
     Route::get('jurusan/edit/{id}', 'edit')->name('admin.jurusan.edit');
-    Route::post('jurusan/update/{id?}', 'update')->name('admin.jurusan.update');
+    Route::post('jurusan/update/{id}', 'update')->name('admin.jurusan.update');
 });
 
 // Route Logout
@@ -193,7 +195,7 @@ Route::controller(TeachController::class)->middleware(['auth'])->group(function 
     Route::get('teachs/create', 'create')->name('admin.teach.create');
     Route::post('teachs/create', 'store')->name('admin.teach.store');
     Route::get('teachs/edit/{id}', 'edit')->name('admin.teach.edit');
-    Route::post('teachs/update/{id?}', 'update')->name('admin.teach.update');
+    Route::post('teachs/update/{id}', 'update')->name('admin.teach.update');
 });
 
 // Route Forgot Password //

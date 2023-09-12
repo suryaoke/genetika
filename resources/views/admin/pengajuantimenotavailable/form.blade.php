@@ -7,7 +7,7 @@
         Dosen
     </label>
     {!! Form::select(
-        'lecturers_id',
+        'lecturers',
         $lecturers,
         isset($timenotavailables->lecturers_id) ? $timenotavailables->lecturers_id : '',
         ['class' => 'form-control select2 to-select', 'id' => 'lecturers', 'required', 'placeholder' => 'Pilih Dosen'],
@@ -38,7 +38,6 @@
     ]) !!}
     <label id="times-error" class="error" for="times" style="display: none;">This field is required.</label>
 </div>
-<input type="hidden" name="status" value="1">
 <div class="mt-4">
     <button class="btn btn-primary py-3 px-4 w-full xl:w-32 xl:mr-3 align-top" type="submit">Save</button>
     <a href="{{ route('admin.pengajuantimenotavailables') }}"

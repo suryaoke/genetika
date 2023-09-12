@@ -9,26 +9,22 @@ use App\Models\Time;
 use App\Http\Controllers\Controller;
 use App\Models\PengajuanTimenotavailable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class PengajuanTimenotavailableController extends Controller
 {
     public function index(Request $request)
     {
-        $searchlecturers   = $request->input('searchlecturers');
-        $searchday         = $request->input('searchday');
-        $timenotavailables = PengajuanTimenotavailable::whereHas('lecturer', function ($query) use ($searchlecturers) {
+        $userId = Auth::user()->id;
+        $role = Auth::user()->role; // Mengambil peran pengguna
 
-            if (!empty($searchlecturers)) {
-                $query = $query->where('lecturers.name', 'LIKE', '%' . $searchlecturers . '%');
+        $timenotavailables = PengajuanTimenotavailable::whereHas('lecturer', function ($query) use ($userId, $role) {
+            if ($role != 4) {
+                $query->where('akun', $userId);
             }
-        })->whereHas('day', function ($query) use ($searchday) {
-            if (!empty($searchday)) {
-                $query = $query->where('days.name_day', 'LIKE', '%' . $searchday . '%');
-            }
-        });
+        })->get();
 
-        $timenotavailables = $timenotavailables->orderBy('id', 'desc')->get();
 
         return view('admin.pengajuantimenotavailable.index', compact('timenotavailables'));
     }
@@ -36,8 +32,8 @@ class PengajuanTimenotavailableController extends Controller
     public function create(Request $request)
     {
 
-        $lecturers = Lecturer::orderBy('name', 'asc')->pluck('name', 'id');
-        $days      = Day::orderBy('name_day', 'asc')->pluck('name_day', 'id');
+        $lecturers = Lecturer::orderBy('name', 'asc')->where('akun', Auth::user()->id)->pluck('name', 'id');
+        $days      = Day::orderBy('name_day', 'desc')->pluck('name_day', 'id');
         $times     = Time::orderBy('range', 'asc')->pluck('range', 'id');
 
         return view('admin.pengajuantimenotavailable.create', compact('lecturers', 'days', 'times'));
@@ -81,7 +77,7 @@ class PengajuanTimenotavailableController extends Controller
     public function edit($id)
     {
         $timenotavailables = PengajuanTimenotavailable::find($id);
-        $lecturers         = Lecturer::orderBy('name', 'asc')->pluck('name', 'id');
+        $lecturers = Lecturer::orderBy('name', 'asc')->where('akun', Auth::user()->id)->pluck('name', 'id');
         $days              = Day::orderBy('name_day', 'asc')->pluck('name_day', 'id');
         $times             = Time::orderBy('range', 'asc')->pluck('range', 'id');
 

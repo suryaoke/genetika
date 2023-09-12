@@ -59,6 +59,7 @@
       $pengajuanadd = URL::route('admin.pengajuantimenotavailable.create');
       $jadwalall = URL::route('jadwal.all');
       $jadwalallkepsek = URL::route('jadwal.all.kepsek');
+      $jadwalallguru = URL::route('jadwal.all.guru');
   @endphp
 
   <nav class="side-nav">
@@ -172,29 +173,20 @@
                                       <a href="javascript:;" class="side-menu  side-menu--active">
                                       @elseif ($url == $dayadd)
                                           <a href="javascript:;" class="side-menu  side-menu--active">
-                                          @elseif ($url == $jurusan)
+                                          @elseif ($url == $notedit)
                                               <a href="javascript:;" class="side-menu  side-menu--active">
-                                              @elseif ($url == $jurusanedit)
+                                              @elseif ($url == $notadd)
                                                   <a href="javascript:;" class="side-menu  side-menu--active">
-                                                  @elseif ($url == $jurusanadd)
+                                                  @elseif ($url == $not)
                                                       <a href="javascript:;" class="side-menu  side-menu--active">
-                                                      @elseif ($url == $notedit)
+                                                      @elseif ($url == $pengajuan)
                                                           <a href="javascript:;" class="side-menu  side-menu--active">
-                                                          @elseif ($url == $notadd)
-                                                              <a href="javascript:;"
-                                                                  class="side-menu  side-menu--active">
-                                                              @elseif ($url == $not)
-                                                                  <a href="javascript:;"
-                                                                      class="side-menu  side-menu--active">
-                                                                  @elseif ($url == $pengajuan)
-                                                                      <a href="javascript:;"
-                                                                          class="side-menu  side-menu--active">
-                                                                      @else
-                                                                          <a href="javascript:;" class="side-menu ">
+                                                          @else
+                                                              <a href="javascript:;" class="side-menu ">
                   @endif
                   <div class="side-menu__icon"> <i data-lucide="calendar"></i> </div>
                   <div class="side-menu__title">
-                      Data
+                      Data Waktu
                       <div class="side-menu__sub-icon "> <i data-lucide="chevron-down"></i> </div>
                   </div>
                   </a>
@@ -212,12 +204,6 @@
                           </a>
                       </li>
                       <li>
-                          <a href="{{ route('admin.jurusans') }}" class="side-menu">
-                              <div class="side-menu__icon"> <i data-lucide="calendar"></i> </div>
-                              <div class="side-menu__title"> Jurusan </div>
-                          </a>
-                      </li>
-                      <li>
                           <a href="{{ route('admin.timenotavailables') }}" class="side-menu">
                               <div class="side-menu__icon"> <i data-lucide="clock"></i> </div>
                               <div class="side-menu__title"> Waktu Berhalangan</div>
@@ -231,6 +217,22 @@
                       </li>
                   </ul>
               </li>
+              <li>
+                  @if ($url == $jurusan)
+                      <a href="{{ route('admin.jurusans') }}" class="side-menu  side-menu--active">
+                      @elseif ($url == $jurusanedit)
+                          <a href="{{ route('admin.jurusans') }}" class="side-menu  side-menu--active">
+                          @elseif ($url == $jurusanadd)
+                              <a href="{{ route('admin.jurusans') }}" class="side-menu  side-menu--active">
+                              @else
+                                  <a href="{{ route('admin.jurusans') }}" class="side-menu ">
+                  @endif
+                 
+                      <div class="side-menu__icon"> <i data-lucide="calendar"></i> </div>
+                      <div class="side-menu__title"> Jurusan </div>
+                  </a>
+              </li>
+
 
               <li>
                   @if ($url == $mapel)
@@ -292,15 +294,15 @@
                                   <a href="{{ route('admin.pengajuantimenotavailables') }}" class="side-menu">
                   @endif
                   <div class="side-menu__icon"> <i data-lucide="clock"></i> </div>
-                  <div class="side-menu__title"> Waktu Berhalangan </div>
+                  <div class="side-menu__title">Pengajuan Waktu Berhalangan </div>
                   </a>
               </li>
 
               <li>
-                  @if ($url == $jadwalall)
-                      <a href="{{ route('jadwal.all') }}" class="side-menu  side-menu--active">
+                  @if ($url == $jadwalallguru)
+                      <a href="{{ route('jadwal.all.guru') }}" class="side-menu  side-menu--active">
                       @else
-                          <a href="{{ route('jadwal.all') }}" class="side-menu ">
+                          <a href="{{ route('jadwal.all.guru') }}" class="side-menu ">
                   @endif
                   <div class="side-menu__icon"> <i data-lucide="file-text"></i> </div>
                   <div class="side-menu__title"> Jadwal Mata Pelajaran </div>

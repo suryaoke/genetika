@@ -8,6 +8,7 @@ use App\Models\Day;
 use App\Models\Jadwal;
 use App\Models\Room;
 use App\Models\Time;
+use Illuminate\Support\Facades\Auth;
 
 class JadwalController extends Controller
 {
@@ -57,9 +58,9 @@ class JadwalController extends Controller
         // End Bagian search Data //
 
 
-        $schedules = Jadwal::orderBy('days_id', 'asc')
-            ->orderBy('times_id', 'asc');
-        $schedules = $query->get();
+        $schedules = $query->orderBy('days_id', 'asc')
+            ->orderBy('times_id', 'asc')
+            ->get();
         $day = Day::all();
         $time = Time::all();
         $room = Room::all();
@@ -135,7 +136,6 @@ class JadwalController extends Controller
 
     public function allKepsek(Request $request)
     {
-
         // Bagian search Data //
         $searchDays = $request->input('searchdays');
         $searchLecturers = $request->input('searchlecturers');
@@ -169,7 +169,6 @@ class JadwalController extends Controller
                 });
             });
         }
-
         // Filter berdasarkan nama kelas jika searchclass tidak kosong
         if (!empty($searchClass)) {
             $query->whereHas('teach', function ($lecturerQuery) use ($searchClass) {
@@ -178,17 +177,19 @@ class JadwalController extends Controller
         }
         // End Bagian search Data //
 
+        // Mengambil data jadwal berdasarkan 'status'
+        $schedules = $query->whereIn('status', [1, 2])
+            ->orderBy('days_id', 'asc')
+            ->orderBy('times_id', 'asc')
+            ->get();
 
-
-
-        $schedules = Jadwal::orderBy('days_id', 'asc')
-            ->orderBy('times_id', 'asc')->where('status', '1');
-        $schedules = $query->get();
         $day = Day::all();
         $time = Time::all();
         $room = Room::all();
+
         return view('admin.jadwal.jadwal_kepsek', compact('day', 'time', 'room', 'schedules'));
     }
+
 
 
     public function updateVerifikasi()
@@ -201,7 +202,7 @@ class JadwalController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
-    }
+    } // end method
 
 
     public function verifikasiOne($id)
@@ -214,6 +215,65 @@ class JadwalController extends Controller
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
+    } // end method
+
+
+
+
+    public function allGuru(Request $request)
+    {
+
+        // Bagian search Data //
+        $searchDays = $request->input('searchdays');
+        $searchLecturers = $request->input('searchlecturers');
+        $searchCourse = $request->input('searchcourse');
+        $searchClass = $request->input('searchclass');
+
+        // Query dasar yang akan digunakan untuk mencari data Teach
+        $query = Jadwal::query();
+
+        // Filter berdasarkan nama hari jika searchlecturers tidak kosong
+        if (!empty($searchDays)) {
+            $query->whereHas('day', function ($lecturerQuery) use ($searchDays) {
+                $lecturerQuery->where('name_day', 'LIKE', '%' . $searchDays . '%');
+            });
+        }
+
+        // Filter berdasarkan nama mata Pelajaran jika searchcourse tidak kosong
+        if (!empty($searchCourse)) {
+            $query->whereHas('teach', function ($teachQuery) use ($searchCourse) {
+                $teachQuery->whereHas('course', function ($courseQuery) use ($searchCourse) {
+                    $courseQuery->where('name', 'LIKE', '%' . $searchCourse . '%');
+                });
+            });
+        }
+
+        // Filter berdasarkan nama kelas jika searchclass tidak kosong
+        if (!empty($searchClass)) {
+            $query->whereHas('teach', function ($lecturerQuery) use ($searchClass) {
+                $lecturerQuery->where('class_room', 'LIKE', '%' . $searchClass . '%');
+            });
+        }
+        // End Bagian search Data //
+        $userId = Auth::user()->id;
+
+        $schedules = $query
+            ->join(
+                'teachs',
+                'jadwals.teachs_id',
+                '=',
+                'teachs.id'
+            )
+            ->join('lecturers', 'teachs.lecturers_id', '=', 'lecturers.id')
+            ->where('status', '2')
+            ->where('lecturers.akun', '=', $userId)
+            ->orderBy('days_id', 'asc')
+            ->orderBy('times_id', 'asc')
+            ->get();
+        $day = Day::all();
+        $time = Time::all();
+        $room = Room::all();
+        return view('admin.jadwal.jadwal_guru', compact('day', 'time', 'room', 'schedules'));
     } // end method
 
 

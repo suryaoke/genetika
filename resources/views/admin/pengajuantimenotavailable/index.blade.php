@@ -16,24 +16,7 @@
                         Data</a>
                 @endif
             </div>
-            <form role="form" action="{{ route('admin.pengajuantimenotavailables') }}" method="get" class="sm:flex">
-                <div class="flex-1 sm:mr-2">
-                    <div class="form-group">
-                        <input type="text" name="searchlecturers" class="form-control"
-                            placeholder="Mencari Berdasarkan Nama Dosen" value="{{ request('searchlecturers') }}">
-                    </div>
-                </div>
-                <div class="flex-1 sm:mr-2">
-                    <div class="form-group">
-                        <input type="text" name="searchday" class="form-control" placeholder="Mencari Berdasarkan Hari"
-                            value="{{ request('searchday') }}">
-                    </div>
-                </div>
-
-                <div class="sm:ml-1">
-                    <button type="submit" class="btn btn-default">Search</button>
-                </div>
-            </form>
+           
         </div>
         <div class="page-content">
             <div class="container-fluid">
@@ -45,7 +28,7 @@
                                 <thead>
                                     <tr>
                                         <th class="whitespace-nowrap">No.</th>
-                                        <th class="whitespace-nowrap">Dosen</th>
+                                        <th class="whitespace-nowrap">Guru</th>
                                         <th class="whitespace-nowrap">Hari</th>
                                         <th class="whitespace-nowrap">Waktu</th>
                                         <th class="whitespace-nowrap">Status</th>
@@ -75,7 +58,7 @@
                                                 @if (Auth::user()->role == '5')
                                                     @if ($timenotavailable->status == '1')
                                                         <a href="{{ route('admin.pengajuantimenotavailable.edit', $timenotavailable->id) }}"
-                                                            class="btn btn-success mr-1 mb-2">
+                                                            class="btn btn-primary mr-1 mb-2">
                                                             <i data-lucide="edit" class="w-4 h-4"></i>
                                                         </a>
                                                     @endif

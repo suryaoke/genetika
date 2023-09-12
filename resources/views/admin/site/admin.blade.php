@@ -76,7 +76,7 @@
                                 <div class="report-box zoom-in">
                                     <div class="box p-5">
                                         <div class="flex">
-                                            <i data-lucide="clock" class="report-box__icon text-primary"></i>
+                                            <i data-lucide="clock" class="report-box__icon text-warning"></i>
                                         </div>
                                         <div class="text-3xl font-medium leading-8 mt-6"> {{ $times }}</div>
                                         <div class="text-base text-slate-500 mt-1">Waktu</div>
@@ -87,7 +87,7 @@
                                 <div class="report-box zoom-in">
                                     <div class="box p-5">
                                         <div class="flex">
-                                            <i data-lucide="calendar" class="report-box__icon text-pending"></i>
+                                            <i data-lucide="calendar" class="report-box__icon text-warning"></i>
 
                                         </div>
                                         <div class="text-3xl font-medium leading-8 mt-6">{{ $days }}</div>
@@ -138,11 +138,35 @@
                                 <div class="report-box zoom-in">
                                     <div class="box p-5">
                                         <div class="flex">
-                                            <i data-lucide="home" class="report-box__icon text-pending"></i>
+                                            <i data-lucide="home" class="report-box__icon text-primary"></i>
 
                                         </div>
                                         <div class="text-3xl font-medium leading-8 mt-6">{{ $rooms }}</div>
                                         <div class="text-base text-slate-500 mt-1">Ruangan</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                                <div class="report-box zoom-in">
+                                    <div class="box p-5">
+                                        <div class="flex">
+                                            <i data-lucide="clock" class="report-box__icon text-pending"></i>
+                                        </div>
+                                        <div class="text-3xl font-medium leading-8 mt-6"> {{ $berhalangan }}</div>
+                                        <div class="text-base text-slate-500 mt-1">Waktu Berhalangan</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                                <div class="report-box zoom-in">
+                                    <div class="box p-5">
+                                        <div class="flex">
+                                            <i data-lucide="file" class="report-box__icon text-success"></i>
+                                        </div>
+                                        <div class="text-3xl font-medium leading-8 mt-6"> {{ $jurusan }}</div>
+                                        <div class="text-base text-slate-500 mt-1">Jurusan</div>
                                     </div>
                                 </div>
                             </div>
@@ -173,6 +197,37 @@
                                         </div>
                                         <div class="text-3xl font-medium leading-8 mt-6">{{ $lecturers }}</div>
                                         <div class="text-base text-slate-500 mt-1">Guru</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+
+
+                    {{--  // bagian admin //  --}}
+                    @if (Auth::user()->role == '5')
+                        <div class="grid grid-cols-12 gap-6 mt-5">
+                            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                                <div class="report-box zoom-in">
+                                    <div class="box p-5">
+                                        <div class="flex">
+                                            <i data-lucide="clock" class="report-box__icon text-warning"></i>
+                                        </div>
+                                        <div class="text-3xl font-medium leading-8 mt-6">{{ $pengajuanguru }}</div>
+                                        <div class="text-base text-slate-500 mt-1">Waktu Berhalangan</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                                <div class="report-box zoom-in">
+                                    <div class="box p-5">
+                                        <div class="flex">
+                                            <i data-lucide="file" class="report-box__icon text-success"></i>
+
+                                        </div>
+                                        <div class="text-3xl font-medium leading-8 mt-6">{{ $jadwalguru }}</div>
+                                        <div class="text-base text-slate-500 mt-1">Jadwal Mata Pelajaran</div>
                                     </div>
                                 </div>
                             </div>

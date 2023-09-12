@@ -14,20 +14,8 @@ class TimenotavailableController extends Controller
 
     public function index(Request $request)
     {
-        $searchlecturers   = $request->input('searchlecturers');
-        $searchday         = $request->input('searchday');
-        $timenotavailables = Timenotavailable::whereHas('lecturer', function ($query) use ($searchlecturers) {
 
-            if (!empty($searchlecturers)) {
-                $query = $query->where('lecturers.name', 'LIKE', '%' . $searchlecturers . '%');
-            }
-        })->whereHas('day', function ($query) use ($searchday) {
-            if (!empty($searchday)) {
-                $query = $query->where('days.name_day', 'LIKE', '%' . $searchday . '%');
-            }
-        });
-
-        $timenotavailables = $timenotavailables->orderBy('id', 'desc')->get();
+        $timenotavailables = Timenotavailable::orderBy('id', 'desc')->get();
 
         return view('admin.timenotavailable.index', compact('timenotavailables'));
     }
