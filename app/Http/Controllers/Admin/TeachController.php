@@ -63,6 +63,24 @@ class TeachController extends Controller
             'courses'   => 'required',
         ]);
 
+        // Cek apakah kombinasi yang sama sudah ada dalam basis data
+        $existingTeach = Teach::where([
+            'class_room'   => $request->input('roomclass'),
+            'year'         => $request->input('year'),
+            'lecturers_id' => $request->input('lecturers'),
+            'courses_id'   => $request->input('courses'),
+        ])->first();
+
+        if ($existingTeach) {
+            // Jika kombinasi sudah ada, tampilkan pesan kesalahan
+            $notification = array(
+                'message' => 'Pengampu Sudah Ada',
+                'alert-type' => 'warning'
+            );
+
+            return redirect()->back()->with($notification);
+        }
+
         $params = [
             'class_room'   => $request->input('roomclass'),
             'year'         => $request->input('year'),

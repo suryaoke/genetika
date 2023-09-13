@@ -58,11 +58,11 @@
     @if (Auth::user()->role == '3')
         <div class="col-span-2 mb-4 mt-4">
             <a class="btn btn-primary btn-block" data-tw-toggle="modal" data-tw-target="#button-modal-preview">
-                <span class="glyphicon glyphicon-download"></span>  <i data-lucide="send"
-                    class="w-4 h-4"></i>&nbsp;Kirim Jadwal All
+                <span class="glyphicon glyphicon-download"></span> <i data-lucide="send" class="w-4 h-4"></i>&nbsp;Kirim
+                Jadwal All
             </a>
-      
-            <a class="btn btn-success btn-block ml-2" data-tw-toggle="modal" data-tw-target="#button-modal-preview">
+
+            <a class="btn btn-outline-secondary btn-block ml-2" data-tw-toggle="modal" data-tw-target="#add-schedule-modal">
                 <span class="glyphicon glyphicon-download"></span> Tambah Jadwal
             </a>
         </div>
@@ -227,7 +227,7 @@
         </div>
     @endforeach
 
-
+    <!-- End Modal Edit Jadwal -->
 
 
     <!-- BEGIN: Modal Kirim Jadwal All-->
@@ -283,7 +283,100 @@
         </div> <!-- END: Modal Content -->
     @endforeach
 
+    <!-- BEGIN: Modal Kirim Jadwal Satu-->
 
+
+    <!-- Modal Tambah Jadwal -->
+
+    <div id="add-schedule-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <!-- BEGIN: Modal Header -->
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Tambah Jadwal</h2>
+                    <div class="dropdown sm:hidden"> <a class="dropdown-toggle w-5 h-5 block" href="javascript:;"
+                            aria-expanded="false" data-tw-toggle="dropdown"> <i data-lucide="more-horizontal"
+                                class="w-5 h-5 text-slate-500"></i> </a>
+                        <div class="dropdown-menu w-40">
+
+                        </div>
+                    </div>
+                </div> <!-- END: Modal Header -->
+                <!-- BEGIN: Modal Body -->
+
+                <form method="post" action="{{ route('jadwal.add') }}">
+                    @csrf
+                    <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+                        <div class="col-span-12 sm:col-span-6"> <label for="edit-jam">Guru</label>
+                            <select name="lecturers_id" id="lecturers_id" class="form-control w-full" required>
+                                <option value="">Pilih Guru</option>
+                                @foreach ($guru as $gurus)
+                                    <option value="{{ $gurus->id }}">{{ $gurus->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <label for="edit-jam">Jam</label>
+                            <select name="times_id" id="edit-jam" class="form-control w-full" required>
+                                <option value="">Pilih Jam</option>
+                                @foreach ($time as $times)
+                                    <option value="{{ $times->id }}">{{ $times->range }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-6"> <label for="modal-form-3" class="form-label">Mata
+                                Pelajaran</label>
+                            <select name="courses_id" id="courses_id" class="form-control w-full" required>
+                                <option value="">Mata Pelajaran</option>
+                                @foreach ($course as $courses)
+                                    <option value="{{ $courses->id }}">{{ $courses->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <label for="modal-form-4" class="form-label">Hari </label>
+                            <select name="days_id" id="edit-hari" class="form-control w-full" required>
+                                <option value="">Pilih Hari</option>
+                                @foreach ($day as $days)
+                                    <option value="{{ $days->id }}">{{ $days->name_day }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <label for="edit-jam">Kelas</label>
+
+                            <input type="text" name="class_room" id="class_room" class="form-control w-full"
+                                placeholder="Masukkan kelas" required>
+
+                        </div>
+
+                        <div class="col-span-12 sm:col-span-6"> <label for="edit-ruangan">Ruangan</label>
+                            <select name="rooms_id" id="edit-ruangan" class="form-control w-full" required>
+                                <option value="">Pilih Ruangan</option>
+                                @foreach ($room as $rooms)
+                                    <option value="{{ $rooms->id }}">{{ $rooms->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <label for="edit-jam">Tahun Kurikulum</label>
+
+                            <input type="text" name="year" id="year" class="form-control w-full"
+                                placeholder="Masukkan Tahun" required>
+
+                        </div>
+                    </div> <!-- END: Modal Body -->
+                    <!-- BEGIN: Modal Footer -->
+                    <div class="modal-footer"> <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
+                        <button type="submit" class="btn btn-primary w-20">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- End Modal Tambah Jadwal -->
 
 
 

@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Course;
 use Illuminate\Http\Request;
 use App\Models\Day;
 use App\Models\Jadwal;
+use App\Models\Lecturer;
 use App\Models\Room;
+use App\Models\Teach;
 use App\Models\Time;
 use Illuminate\Support\Facades\Auth;
 
@@ -64,7 +67,10 @@ class JadwalController extends Controller
         $day = Day::all();
         $time = Time::all();
         $room = Room::all();
-        return view('admin.jadwal.jadwal_all', compact('day', 'time', 'room', 'schedules'));
+        $guru = Lecturer::all();
+        $course = Course::all();
+        $room = Room::all();
+        return view('admin.jadwal.jadwal_all', compact('room', 'course', 'guru', 'day', 'time', 'room', 'schedules'));
     }
 
     public function updatejadwal(Request $request, $id)
@@ -276,5 +282,64 @@ class JadwalController extends Controller
         return view('admin.jadwal.jadwal_guru', compact('day', 'time', 'room', 'schedules'));
     } // end method
 
+    public function addJadwal(Request $request)
+    {
+        // Validasi data pada tabel 'teachs'
+        $existingTeach = Teach::where('courses_id', $request->input('courses_id'))
+            ->where('lecturers_id', $request->input('lecturers_id'))
+            ->where('class_room', $request->input('class_room'))
+            ->first();
 
+        $notification = array(
+            'message' => 'Kombinasi data yang sama sudah ada dalam pengampu',
+            'alert-type' => 'warning'
+        );
+
+        if ($existingTeach) {
+            return redirect()->back()->with($notification);
+        }
+
+        // Membuat objek 'Teach' baru
+        $teach = new Teach();
+        $teach->courses_id = $request->input('courses_id');
+        $teach->lecturers_id = $request->input('lecturers_id');
+        $teach->class_room = $request->input('class_room');
+        $teach->year = $request->input('year');
+        $teach->save();
+
+        // Mengambil ID dari teach yang baru saja dibuat
+        $teach_id = $teach->id;
+
+        // Validasi data pada tabel 'jadwals'
+        $existingJadwal = Jadwal::where('teachs_id', $teach_id)
+            ->where('days_id', $request->input('days_id'))
+            ->where('times_id', $request->input('times_id'))
+            ->where('rooms_id', $request->input('rooms_id'))
+            ->first();
+        $notification = array(
+            'message' => 'Kombinasi data yang sama sudah ada dalam jadwal',
+            'alert-type' => 'warning'
+        );
+
+        if ($existingJadwal) {
+            return redirect()->back()->with($notification);
+        }
+
+        // Membuat objek 'Jadwal' baru
+        $jadwal = new Jadwal();
+        $jadwal->teachs_id = $teach_id;
+        $jadwal->days_id = $request->input('days_id');
+        $jadwal->times_id = $request->input('times_id');
+        $jadwal->rooms_id = $request->input('rooms_id');
+        $jadwal->status = 0;
+        $jadwal->save();
+
+        $notification = array(
+            'message' => 'Jadwal Disimpan SuccessFully',
+            'alert-type' => 'success'
+        );
+
+
+        return redirect()->back()->with($notification);
+    }
 }

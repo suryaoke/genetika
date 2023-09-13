@@ -60,6 +60,7 @@ Route::controller(JadwalController::class)->group(function () {
     Route::post('jadwal/upadate/verifikasi', 'updateVerifikasi')->name('jadwal.verifikasi');
     Route::post('jadwal/upadate/verifikasi/one/{id}', 'verifikasiOne')->name('jadwal.verifikasi.one');
     Route::get('jadwal/guru', 'allGuru')->name('jadwal.all.guru');
+    Route::post('jadwal/add', 'addJadwal')->name('jadwal.add');
 });
 
 
