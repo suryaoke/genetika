@@ -11,7 +11,7 @@ class RoomsController extends Controller
 {
     public function index(Request $request)
     {
-        $rooms = Room::orderBy('id', 'desc')->get();
+        $rooms = Room::orderBy('code_rooms', 'asc')->get();
 
         if (!empty($request->searchcode)) {
             $rooms = $rooms->where('code_rooms', 'LIKE', '%' . $request->searchcode . '%');

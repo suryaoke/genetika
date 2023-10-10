@@ -47,7 +47,7 @@ class PengajuanTimenotavailableController extends Controller
             'lecturers_id' => 'required',
             'days'      => 'required',
             'times'     => 'required',
-            'status'    => 'required',
+         
         ]);
 
         // Jika validasi gagal, kembali ke halaman sebelumnya dengan pesan kesalahan
@@ -60,7 +60,7 @@ class PengajuanTimenotavailableController extends Controller
         $timenotavailable->lecturers_id = $request->input('lecturers_id');
         $timenotavailable->days_id = $request->input('days');
         $timenotavailable->times_id = $request->input('times');
-        $timenotavailable->status = $request->input('status');
+        $timenotavailable->status = 1;
         $timenotavailable->save();
 
         $notification = array(

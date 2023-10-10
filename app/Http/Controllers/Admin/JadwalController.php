@@ -69,7 +69,7 @@ class JadwalController extends Controller
         $room = Room::all();
         $guru = Lecturer::all();
         $course = Course::all();
-        $room = Room::all();
+
         return view('admin.jadwal.jadwal_all', compact('room', 'course', 'guru', 'day', 'time', 'room', 'schedules'));
     }
 
@@ -117,15 +117,17 @@ class JadwalController extends Controller
 
     public function updateStatus()
     {
-
-        Jadwal::query()->update(['status' => 1]);
-
+        Jadwal::where('status', '=', 0)
+        ->orWhere('status', '=', 3)
+        ->update(['status' => 1]);
         $notification = array(
             'message' => 'Jadwal Berhasil Di Kirim SuccessFully',
             'alert-type' => 'success'
         );
         return redirect()->back()->with($notification);
     }
+
+
 
     public function statusOne($id)
     {
@@ -184,7 +186,7 @@ class JadwalController extends Controller
         // End Bagian search Data //
 
         // Mengambil data jadwal berdasarkan 'status'
-        $schedules = $query->whereIn('status', [1, 2])
+        $schedules = $query->whereIn('status', [1, 2, 3])
             ->orderBy('days_id', 'asc')
             ->orderBy('times_id', 'asc')
             ->get();
@@ -200,9 +202,8 @@ class JadwalController extends Controller
 
     public function updateVerifikasi()
     {
-
-        Jadwal::query()->update(['status' => 2]);
-
+        Jadwal::where('status', '=', 1)
+        ->update(['status' => 2]);
         $notification = array(
             'message' => 'Jadwal Berhasil Di Verifikasi SuccessFully',
             'alert-type' => 'success'
@@ -342,4 +343,16 @@ class JadwalController extends Controller
 
         return redirect()->back()->with($notification);
     }
+    public function verifikasiTolak($id)
+    {
+        $schedule = Jadwal::find($id);
+        $schedule->status = '3';
+        $schedule->save();
+        $notification = array(
+            'message' => 'Jadwal Berhasil Di Tolak SuccessFully',
+            'alert-type' => 'danger'
+        );
+        return redirect()->back()->with($notification);
+    } // end method
+
 }

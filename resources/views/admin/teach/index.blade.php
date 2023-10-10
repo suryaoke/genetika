@@ -49,7 +49,7 @@
                                         <th class="whitespace-nowrap">Nama Guru</th>
                                         <th class="whitespace-nowrap">Mata Pelajaran</th>
                                         <th class="whitespace-nowrap">Kelas</th>
-                                        <th class="whitespace-nowrap">Tahun Kurikulum</th>
+                                        <th class="whitespace-nowrap">Tahun Ajaran</th>
                                         <th class="whitespace-nowrap">Action</th>
                                     </tr>
                                 </thead>

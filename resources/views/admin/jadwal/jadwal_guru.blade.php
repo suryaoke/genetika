@@ -57,9 +57,6 @@
                                     <th style="text-align:center;">Semester</th>
                                     <th style="text-align:center;">JP</th>
                                     <th style="text-align:center;">Kelas</th>
-
-
-
                                 </tr>
                             </thead>
                             <tbody>

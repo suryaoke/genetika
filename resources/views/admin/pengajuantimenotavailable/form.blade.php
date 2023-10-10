@@ -4,13 +4,13 @@
 ]) !!}
 <div class="mt-3">
     <label>
-        Dosen
+        Guru
     </label>
     {!! Form::select(
-        'lecturers',
+        'lecturers_id',
         $lecturers,
         isset($timenotavailables->lecturers_id) ? $timenotavailables->lecturers_id : '',
-        ['class' => 'form-control select2 to-select', 'id' => 'lecturers', 'required', 'placeholder' => 'Pilih Dosen'],
+        ['class' => 'form-control select2 to-select', 'id' => 'lecturers', 'required', 'placeholder' => 'Pilih Guru'],
     ) !!}
     <label id="lecturers-error" class="error" for="lecturers" style="display: none;">This field is required.</label>
 </div>

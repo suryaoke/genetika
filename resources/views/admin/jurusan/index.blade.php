@@ -13,6 +13,7 @@
             <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
                 <a href="{{ route('admin.jurusan.create') }}" class="btn btn-primary shadow-md mr-2">Tambah Data</a>
             </div>
+            
             <form role="form" action="{{ route('admin.jurusans') }}" method="get" class="sm:flex">
                 <div class="flex-1 sm:mr-2">
                     <div class="form-group">

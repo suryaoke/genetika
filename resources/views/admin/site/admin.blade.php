@@ -65,6 +65,18 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                                <div class="report-box zoom-in">
+                                    <div class="box p-5">
+                                        <div class="flex">
+                                            <i data-lucide="home" class="report-box__icon text-primary"></i>
+
+                                        </div>
+                                        <div class="text-3xl font-medium leading-8 mt-6">{{ $rooms }}</div>
+                                        <div class="text-base text-slate-500 mt-1">Ruangan</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @endif
 
@@ -200,12 +212,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                                <div class="report-box zoom-in">
+                                    <div class="box p-5">
+                                        <div class="flex">
+                                            <i data-lucide="home" class="report-box__icon text-primary"></i>
+
+                                        </div>
+                                        <div class="text-3xl font-medium leading-8 mt-6">{{ $rooms }}</div>
+                                        <div class="text-base text-slate-500 mt-1">Ruangan</div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @endif
 
 
 
-                    {{--  // bagian admin //  --}}
+                    {{--  // bagian guru //  --}}
                     @if (Auth::user()->role == '5')
                         <div class="grid grid-cols-12 gap-6 mt-5">
                             <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
@@ -228,6 +252,18 @@
                                         </div>
                                         <div class="text-3xl font-medium leading-8 mt-6">{{ $jadwalguru }}</div>
                                         <div class="text-base text-slate-500 mt-1">Jadwal Mata Pelajaran</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 sm:col-span-6 xl:col-span-3 intro-y">
+                                <div class="report-box zoom-in">
+                                    <div class="box p-5">
+                                        <div class="flex">
+                                            <i data-lucide="home" class="report-box__icon text-primary"></i>
+
+                                        </div>
+                                        <div class="text-3xl font-medium leading-8 mt-6">{{ $rooms }}</div>
+                                        <div class="text-base text-slate-500 mt-1">Ruangan</div>
                                     </div>
                                 </div>
                             </div>

@@ -61,6 +61,7 @@ Route::controller(JadwalController::class)->group(function () {
     Route::post('jadwal/upadate/verifikasi/one/{id}', 'verifikasiOne')->name('jadwal.verifikasi.one');
     Route::get('jadwal/guru', 'allGuru')->name('jadwal.all.guru');
     Route::post('jadwal/add', 'addJadwal')->name('jadwal.add');
+    Route::post('jadwal/upadate/tolak/one/{id}', 'verifikasiTolak')->name('jadwal.verifikasi.tolak');
 });
 
 
@@ -81,7 +82,7 @@ Route::controller(GenetikController::class)->group(function () {
 Route::controller(LecturersController::class)->group(function () {
     Route::get('lecturers/delete/{id}', 'destroy')->name('admin.lecturer.delete');
     Route::get('lecturers', 'index')->name('admin.lecturers');
-    Route::get('lecturers/create', '@create')->name('admin.lecturer.create');
+    Route::get('lecturers/create', 'create')->name('admin.lecturer.create');
     Route::post('lecturers/create', 'store')->name('admin.lecturer.store');
     Route::get('lecturers/edit/{id}', 'edit')->name('admin.lecturer.edit');
     Route::post('lecturers/update/{id}', 'update')->name('admin.lecturer.update');

@@ -110,17 +110,20 @@
                                         </td>
                                         <td>{{ isset($schedule->teach->class_room) ? $schedule->teach->class_room : '' }}
                                         </td>
-
                                         <td>
                                             @if ($schedule->status == '0')
                                                 <span class="btn btn-outline-warning">Proses Penjadwalan</span>
                                             @elseif($schedule->status == '1')
-                                                <span class="btn btn-outline-danger">Menunggu Verifikasi</span>
+                                                <span class="btn btn-outline-pending">Menunggu Verifikasi</span>
                                             @elseif($schedule->status == '2')
                                                 <span class="btn btn-outline-success">Kirim</span>
+                                             @elseif($schedule->status == '3')
+                                                <span class="btn btn-outline-danger">Ditolak</span>
                                             @endif
+                                       
 
                                         </td>
+
                                         <td>
                                             @if ($schedule->status == '1')
                                                 <a href="javascript:;" data-tw-toggle="modal"
@@ -128,7 +131,14 @@
                                                     class="btn btn-primary">
                                                     <i data-lucide="check-circle" class="w-4 h-4"></i>
                                                 </a>
+                                                <a href="javascript:;" data-tw-toggle="modal"
+                                                    data-tw-target="#tolak-schedule-modal-{{ $schedule->id }}"
+                                                    class="btn btn-danger mt-2">
+                                                <i data-lucide="x" class="w-4 h-4"></i>
                                             @endif
+
+                                           
+                                            </a>
                                         </td>
 
                                     </tr>
@@ -201,7 +211,36 @@
 
 
 
+  <!-- BEGIN: Modal Tolak Jadwal Satu-->
+  @foreach ($schedules as $schedule)
+  <div id="tolak-schedule-modal-{{ $schedule->id }}" class="modal" tabindex="-1" aria-hidden="true"
+      aria-labelledby="tolak-schedule-modal-label-{{ $schedule->id }}">
+      <div class="modal-dialog">
 
+          <form method="post" action="{{ route('jadwal.verifikasi.tolak', $schedule->id) }}">
+              @csrf
+              <input type="hidden" value="1" name="status">
+              <div class="modal-content"> <a data-tw-dismiss="modal" href="javascript:;"> <i data-lucide="x"
+                          class="w-8 h-8 text-slate-400"></i> </a>
+                  <div class="modal-body p-0">
+                      <div class="p-5 text-center"> <i data-lucide="x"
+                              class="w-16 h-16 text-danger mx-auto mt-3"></i>
+                          <div class="text-3xl mt-5">Tolak Jadwal </div>
+                          <div class="text-slate-500 mt-2">Data Jadwal Mata Pelajaran Di Kirim Ke Wakil..!!
+                          </div>
+                      </div>
+                      <div class="px-5 pb-8 text-center"> <button type="submit" data-tw-dismiss="modal"
+                              class="btn btn-primary w-24">Ok</button>
+
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div> <!-- END: Modal Content -->
+@endforeach
+
+<!-- BEGIN: Modal tolak Jadwal Satu-->
 
 
 

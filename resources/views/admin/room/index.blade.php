@@ -11,7 +11,9 @@
         <h1 class="text-lg font-medium mb-4">Data Ruangan All</h1>
         <div class="mb-3 intro-y flex flex-col sm:flex-row items-center mt-4">
             <div class="w-full sm:w-auto flex mt-4 sm:mt-0">
+                @if (Auth::user()->role == '4')
                 <a href="{{ route('admin.room.create') }}" class="btn btn-primary shadow-md mr-2">Tambah Data</a>
+                @endif
             </div>
             <form role="form" action="{{ route('admin.rooms') }}" method="get" class="sm:flex">
                 <div class="flex-1 sm:mr-2">
@@ -47,7 +49,9 @@
                                         <th class="whitespace-nowrap">Kapasitas</th>
                                         <th class="whitespace-nowrap">Jurusan</th>
                                         <th class="whitespace-nowrap">Jenis</th>
+                                        @if (Auth::user()->role == '4')
                                         <th class="whitespace-nowrap">Action</th>
+                                        @endif
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -71,6 +75,7 @@
                                             <td>
                                                 {{ $room->type }}
                                             </td>
+                                            @if (Auth::user()->role == '4')
                                             <td>
                                                 <a id="delete" href="{{ route('admin.room.delete', $room->id) }}"
                                                     class="btn btn-danger mr-1 mb-2">
@@ -81,6 +86,7 @@
                                                     <i data-lucide="edit" class="w-4 h-4"></i>
                                                 </a>
                                             </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 </tbody>

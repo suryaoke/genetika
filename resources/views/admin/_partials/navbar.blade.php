@@ -16,7 +16,7 @@
                  @elseif (Auth::user()->role == '2')
                      Kepala Sekolah
                  @elseif (Auth::user()->role == '3')
-                     Wakil Kepala
+                     Waka Kurikulum
                  @elseif (Auth::user()->role == '4')
                      Jurusan
                  @elseif (Auth::user()->role == '5')

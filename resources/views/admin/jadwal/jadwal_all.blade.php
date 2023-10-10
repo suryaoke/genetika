@@ -121,9 +121,11 @@
                                                 @if ($schedule->status == '0')
                                                     <span class="btn btn-outline-warning">Proses Penjadwalan</span>
                                                 @elseif($schedule->status == '1')
-                                                    <span class="btn btn-outline-danger">Menunggu Verifikasi</span>
+                                                    <span class="btn btn-outline-pending">Menunggu Verifikasi</span>
                                                 @elseif($schedule->status == '2')
                                                     <span class="btn btn-outline-success">Kirim</span>
+                                                @elseif($schedule->status == '3')
+                                                    <span class="btn btn-outline-danger">Ditolak</span>
                                                 @endif
 
                                             </td>
@@ -140,7 +142,7 @@
                                                     <i data-lucide="edit" class="w-4 h-4 mb"></i>
                                                 </a>
 
-                                                @if (Auth::user()->status == '0')
+                                                @if ($schedule->status == '0' || $schedule->status == '3')
                                                     <a href="javascript:;" data-tw-toggle="modal"
                                                         data-tw-target="#kirim-schedule-modal-{{ $schedule->id }}"
                                                         class="btn btn-primary">
@@ -150,6 +152,7 @@
 
                                             </td>
                                         @endif
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -245,7 +248,6 @@
                         </div>
                         <div class="px-5 pb-8 text-center"> <button type="submit" data-tw-dismiss="modal"
                                 class="btn btn-primary w-24">Ok</button>
-
                         </div>
                     </div>
                 </div>

@@ -13,10 +13,10 @@
 
                 <div class="grid grid-cols-12 gap-2 mt-4">
                     <div class="form-control col-span-4">
-                        <label for="year">Tahun Akademik</label>
+                        <label for="year">Tahun Ajaran</label>
                         <select name="year" class="form-control select2 to-select required mt-2" id="year"
-                            placeholder="Pilih Tahun Akademik">
-                            <option value="">Pilih Tahun Akademik</option>
+                            placeholder="Pilih Tahun Ajaran">
+                            <option value="">Pilih Tahun Ajaran</option>
                             @foreach ($years as $key => $value)
                                 <option value="{{ $key }}" {{ request('year') == $key ? 'selected' : '' }}>
                                     {{ $value }}

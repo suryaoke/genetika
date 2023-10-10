@@ -43,18 +43,9 @@
     <label>
         Jp
     </label>
-    {!! Form::select(
-        'jp',
-        [
-            '1' => '1',
-            '2' => '2',
-            '3' => '3',
-            '4' => '4',
-        ],
-        null,
-        ['class' => 'form-control select2 to-select', 'id' => 'jp', 'required', 'placeholder' => 'Pilih Jp'],
-    ) !!}
-    <label id="jp-error" class="error" for="jp" style="display: none;">This field is required.</label>
+    <input type="text" id="jp" name="jp" class="form-control" required maxlength="100"
+    placeholder="Jumlah JP">
+       <label id="jp-error" class="error" for="jp" style="display: none;">This field is required.</label>
 </div>
 
 <div class="mt-4">

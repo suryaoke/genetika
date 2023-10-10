@@ -30,22 +30,8 @@
         <label>
             Jp
         </label>
-        {!! Form::select(
-            'jp',
-            [
-                '1' => '1',
-                '2' => '2',
-                '3' => '3',
-                '4' => '4',
-            ],
-            null,
-            [
-                'class' => 'intro-x login__input form-control py-3 px-4 blockselect2 to-select',
-                'id' => 'jp',
-                'required',
-                'placeholder' => 'Pilih Jp',
-            ],
-        ) !!}
+        <input type="text" id="jp" name="jp" class="form-control" required maxlength="100"
+    placeholder="Jumlah JP">
         <label id="jp-error" class="error" for="jp" style="display: none;">This field is required.</label>
     </div>
     <div class="mt-3">

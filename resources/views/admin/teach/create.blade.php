@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="intro-y flex items-center mt-8 mb-4">
-        <h1 class="text-lg font-medium mr-auto">Add Data Guru</h1>
+        <h1 class="text-lg font-medium mr-auto">Add Data Pengampu</h1>
     </div>
     <div class="box-body">
         <div class="row">

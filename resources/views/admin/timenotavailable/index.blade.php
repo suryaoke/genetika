@@ -24,7 +24,7 @@
                                 <thead>
                                     <tr>
                                         <th class="whitespace-nowrap">No.</th>
-                                        <th class="whitespace-nowrap">Dosen</th>
+                                        <th class="whitespace-nowrap">Nama Guru</th>
                                         <th class="whitespace-nowrap">Hari</th>
                                         <th class="whitespace-nowrap">Waktu</th>
                                         <th class="whitespace-nowrap">Action</th>
