@@ -62,6 +62,7 @@ Route::controller(JadwalController::class)->group(function () {
     Route::get('jadwal/guru', 'allGuru')->name('jadwal.all.guru');
     Route::post('jadwal/add', 'addJadwal')->name('jadwal.add');
     Route::post('jadwal/upadate/tolak/one/{id}', 'verifikasiTolak')->name('jadwal.verifikasi.tolak');
+    Route::get('jadwal/excel', 'excelJadwal')->name('jadwal.excel');
 });
 
 

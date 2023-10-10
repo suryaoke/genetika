@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SchedulesExport implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles
+class SchedulesExport1 implements FromCollection, WithMapping, WithHeadings, ShouldAutoSize, WithStyles
 {
     protected $schedules;
 

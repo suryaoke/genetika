@@ -137,13 +137,15 @@ class GenetikController extends Controller
     public function excel($id)
     {
         $schedules = Schedule::with('day', 'time', 'room', 'teach.course', 'teach.lecturer')
-            ->orderBy('days_id', 'desc')
-            ->orderBy('times_id', 'desc')
+        ->join('teachs', 'schedules.teachs_id', '=', 'teachs.id')
+        ->orderBy('teachs.class_room', 'asc') // Urutkan berdasarkan class_room terkecil
+            ->orderBy('days_id', 'asc')
+            ->orderBy('times_id', 'asc')
             ->where('type', $id)
             ->get();
-
+            
         $export = new SchedulesExport($schedules);
-        return Excel::download($export, 'AlgoritmaGenetika.xlsx');
+        return Excel::download($export, 'JadwalAlgoritmaSementara.xlsx');
     } // end method
 
 

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Exports\SchedulesExport;
+use App\Exports\SchedulesExport1;
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use Illuminate\Http\Request;
@@ -9,9 +11,12 @@ use App\Models\Day;
 use App\Models\Jadwal;
 use App\Models\Lecturer;
 use App\Models\Room;
+use App\Models\Schedule;
 use App\Models\Teach;
 use App\Models\Time;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class JadwalController extends Controller
 {
@@ -118,8 +123,8 @@ class JadwalController extends Controller
     public function updateStatus()
     {
         Jadwal::where('status', '=', 0)
-        ->orWhere('status', '=', 3)
-        ->update(['status' => 1]);
+            ->orWhere('status', '=', 3)
+            ->update(['status' => 1]);
         $notification = array(
             'message' => 'Jadwal Berhasil Di Kirim SuccessFully',
             'alert-type' => 'success'
@@ -203,7 +208,7 @@ class JadwalController extends Controller
     public function updateVerifikasi()
     {
         Jadwal::where('status', '=', 1)
-        ->update(['status' => 2]);
+            ->update(['status' => 2]);
         $notification = array(
             'message' => 'Jadwal Berhasil Di Verifikasi SuccessFully',
             'alert-type' => 'success'
@@ -355,4 +360,17 @@ class JadwalController extends Controller
         return redirect()->back()->with($notification);
     } // end method
 
+
+    public function excelJadwal()
+    {
+        $schedules = Jadwal::with('day', 'time', 'room', 'teach.course', 'teach.lecturer')
+            ->join('teachs', 'jadwals.teachs_id', '=', 'teachs.id')
+            ->orderBy('teachs.class_room', 'asc') // Urutkan berdasarkan class_room terkecil
+            ->orderBy('days_id', 'asc')
+            ->orderBy('times_id', 'asc')
+            ->get();
+
+        $export = new SchedulesExport1($schedules);
+        return Excel::download($export, 'JadwalAlgoritma.xlsx');
+    }
 }

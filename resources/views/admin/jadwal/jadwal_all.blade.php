@@ -55,18 +55,27 @@
     </div>
     {{--  // End Bagian search //  --}}
 
-    @if (Auth::user()->role == '3')
-        <div class="col-span-2 mb-4 mt-4">
+
+    <div class="col-span-2 mb-4 mt-4">
+        @if (Auth::user()->role == '3')
             <a class="btn btn-primary btn-block" data-tw-toggle="modal" data-tw-target="#button-modal-preview">
                 <span class="glyphicon glyphicon-download"></span> <i data-lucide="send" class="w-4 h-4"></i>&nbsp;Kirim
                 Jadwal All
             </a>
-
+        @endif
+        <a class="btn btn-success btn-block" href=" {{ route('jadwal.excel') }} ">
+            <span class="glyphicon glyphicon-download"></span> </span> <i data-lucide="printer"
+                class="w-4 h-4"></i>&nbsp;Export Excel
+        </a>
+        @if (Auth::user()->role == '3')
             <a class="btn btn-outline-secondary btn-block ml-2" data-tw-toggle="modal" data-tw-target="#add-schedule-modal">
                 <span class="glyphicon glyphicon-download"></span> Tambah Jadwal
             </a>
-        </div>
-    @endif
+        @endif
+
+    </div>
+
+
     <div class="page-content">
         <div class="container-fluid">
             <div class="row">
