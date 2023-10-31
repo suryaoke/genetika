@@ -9,7 +9,7 @@ class Jadwal extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    
+
     public function day()
     {
         return $this->belongsTo(Day::class, 'days_id');
@@ -28,5 +28,25 @@ class Jadwal extends Model
     public function room()
     {
         return $this->belongsTo(Room::class, 'rooms_id');
+    }
+
+    public function gurus()
+    {
+        return $this->belongsTo(Lecturer::class, 'lecturers_id');
+    }
+
+    public function haris()
+    {
+        return $this->belongsTo(Day::class, 'days_id');
+    }
+
+    public function ruangans()
+    {
+        return $this->belongsTo(Room::class, 'rooms_id');
+    }
+
+    public function waktus()
+    {
+        return $this->belongsTo(Time::class, 'times_id');
     }
 }

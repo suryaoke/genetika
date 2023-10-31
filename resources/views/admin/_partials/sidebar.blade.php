@@ -322,6 +322,21 @@
           @if (Auth::user()->role == '3')
 
               <li>
+                  @if ($url == $pengampu)
+                      <a href="{{ route('admin.teachs') }}" class="side-menu  side-menu--active">
+                      @elseif ($url == $pengampuadd)
+                          <a href="{{ route('admin.teachs') }}" class="side-menu  side-menu--active">
+                          @elseif ($url == $pengampuedit)
+                              <a href="{{ route('admin.teachs') }}" class="side-menu  side-menu--active">
+                              @else
+                                  <a href="{{ route('admin.teachs') }}" class="side-menu">
+                  @endif
+                  <div class="side-menu__icon"> <i data-lucide="landmark"></i> </div>
+                  <div class="side-menu__title"> Pengampu </div>
+                  </a>
+              </li>
+
+              <li>
                   @if ($url == $generate)
                       <a href="javascript:;" class="side-menu  side-menu--active">
                       @elseif ($url == $hasilgenerate)

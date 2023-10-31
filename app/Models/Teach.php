@@ -18,4 +18,8 @@ class Teach extends Model
     {
         return $this->belongsTo(Course::class, 'courses_id');
     }
+    public function gurus()
+    {
+        return $this->belongsTo(Lecturer::class, 'lecturers_id');
+    }
 }

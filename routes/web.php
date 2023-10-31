@@ -63,6 +63,11 @@ Route::controller(JadwalController::class)->group(function () {
     Route::post('jadwal/add', 'addJadwal')->name('jadwal.add');
     Route::post('jadwal/upadate/tolak/one/{id}', 'verifikasiTolak')->name('jadwal.verifikasi.tolak');
     Route::get('jadwal/excel', 'excelJadwal')->name('jadwal.excel');
+    Route::get('jadwal/pdf', 'pdfJadwal')->name('jadwal.pdf');
+    Route::post('jadwalcustom/pdf', 'pdfJadwalCustom')->name('jadwalcustom.pdf');
+
+    Route::post('/jadwalmapel/store', 'JadwalmapelStore')->name('jadwalmapel.store');
+    Route::post('/jadwalmapel/update/{id}', 'JadwalmapelUpdate')->name('jadwalmapel.update');
 });
 
 

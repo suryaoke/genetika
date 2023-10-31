@@ -15,8 +15,10 @@ use App\Models\Schedule;
 use App\Models\Teach;
 use App\Models\Time;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
+use PDF;
 
 class JadwalController extends Controller
 {
@@ -75,36 +77,17 @@ class JadwalController extends Controller
         $guru = Lecturer::all();
         $course = Course::all();
 
-        return view('admin.jadwal.jadwal_all', compact('room', 'course', 'guru', 'day', 'time', 'room', 'schedules'));
+        $pengampu = Teach::orderby('id', 'asc')
+            ->whereNotIn('id', function ($query) {
+                $query->select('teachs_id')
+                    ->from('jadwals');
+            })
+            ->get();
+        // $pengampu = Teach::all();
+
+
+        return view('admin.jadwal.jadwal_all', compact('pengampu', 'room', 'course', 'guru', 'day', 'time', 'room', 'schedules'));
     }
-
-    public function updatejadwal(Request $request, $id)
-    {
-
-        $this->validate($request, [
-            'days_id' => 'required',
-            'times_id' => 'required',
-            'rooms_id' => 'required',
-            // Tambahkan validasi lain sesuai kebutuhan Anda
-        ]);
-
-        // Mengambil data jadwal berdasarkan $id
-        $schedule = Jadwal::find($id);
-
-        // Mengupdate nilai kolom-kolom jadwal berdasarkan data yang diterima dari formulir
-        $schedule->days_id = $request->input('days_id');
-        $schedule->times_id = $request->input('times_id');
-        $schedule->rooms_id = $request->input('rooms_id');
-        // Tambahkan pembaruan lain sesuai kebutuhan Anda
-
-        // Menyimpan perubahan ke dalam database
-        $schedule->save();
-        $notification = array(
-            'message' => 'Jadwal Sementara Update SuccessFully',
-            'alert-type' => 'success'
-        );
-        return redirect()->back()->with($notification);
-    } // end method
 
 
 
@@ -288,66 +271,9 @@ class JadwalController extends Controller
         return view('admin.jadwal.jadwal_guru', compact('day', 'time', 'room', 'schedules'));
     } // end method
 
-    public function addJadwal(Request $request)
-    {
-        // Validasi data pada tabel 'teachs'
-        $existingTeach = Teach::where('courses_id', $request->input('courses_id'))
-            ->where('lecturers_id', $request->input('lecturers_id'))
-            ->where('class_room', $request->input('class_room'))
-            ->first();
-
-        $notification = array(
-            'message' => 'Kombinasi data yang sama sudah ada dalam pengampu',
-            'alert-type' => 'warning'
-        );
-
-        if ($existingTeach) {
-            return redirect()->back()->with($notification);
-        }
-
-        // Membuat objek 'Teach' baru
-        $teach = new Teach();
-        $teach->courses_id = $request->input('courses_id');
-        $teach->lecturers_id = $request->input('lecturers_id');
-        $teach->class_room = $request->input('class_room');
-        $teach->year = $request->input('year');
-        $teach->save();
-
-        // Mengambil ID dari teach yang baru saja dibuat
-        $teach_id = $teach->id;
-
-        // Validasi data pada tabel 'jadwals'
-        $existingJadwal = Jadwal::where('teachs_id', $teach_id)
-            ->where('days_id', $request->input('days_id'))
-            ->where('times_id', $request->input('times_id'))
-            ->where('rooms_id', $request->input('rooms_id'))
-            ->first();
-        $notification = array(
-            'message' => 'Kombinasi data yang sama sudah ada dalam jadwal',
-            'alert-type' => 'warning'
-        );
-
-        if ($existingJadwal) {
-            return redirect()->back()->with($notification);
-        }
-
-        // Membuat objek 'Jadwal' baru
-        $jadwal = new Jadwal();
-        $jadwal->teachs_id = $teach_id;
-        $jadwal->days_id = $request->input('days_id');
-        $jadwal->times_id = $request->input('times_id');
-        $jadwal->rooms_id = $request->input('rooms_id');
-        $jadwal->status = 0;
-        $jadwal->save();
-
-        $notification = array(
-            'message' => 'Jadwal Disimpan SuccessFully',
-            'alert-type' => 'success'
-        );
 
 
-        return redirect()->back()->with($notification);
-    }
+
     public function verifikasiTolak($id)
     {
         $schedule = Jadwal::find($id);
@@ -372,5 +298,162 @@ class JadwalController extends Controller
 
         $export = new SchedulesExport1($schedules);
         return Excel::download($export, 'JadwalAlgoritma.xlsx');
+    }
+
+
+
+    public function pdfJadwal()
+    {
+        $schedules = Jadwal::with('day', 'time', 'room', 'teach.course', 'teach.lecturer')
+            ->join('teachs', 'jadwals.teachs_id', '=', 'teachs.id')
+            ->join('times', 'jadwals.times_id', '=', 'times.id')
+            // Urutkan berdasarkan class_room terkecil
+            ->orderBy('teachs.class_room', 'asc')
+            ->orderBy('days_id', 'asc')
+            ->orderBy('times.range', 'asc')
+
+            ->get();
+
+        $pdf = PDF::loadView('admin.jadwal.pdf', ['schedules' => $schedules]); // Pastikan Anda mengirimkan data dalam bentuk array assosiatif
+        return $pdf->download('invoice.pdf');
+    }
+
+    public function pdfJadwalCustom(Request $request)
+    {
+        $kelas =  $request->input('kelas');
+        $semester =  $request->input('semester');
+
+        $schedules = Jadwal::with('day', 'time', 'room', 'teach.course', 'teach.lecturer')
+            ->join('teachs', 'jadwals.teachs_id', '=', 'teachs.id')
+            ->join('times', 'jadwals.times_id', '=', 'times.id')
+            ->join('courses', 'teachs.courses_id', '=', 'courses.id')
+            ->orderBy('teachs.class_room', 'asc')
+            ->orderBy('days_id', 'asc')
+            ->orderBy('times.range', 'asc')
+            ->where('teachs.class_room', $kelas)
+            ->where('courses.semester', $semester)
+            ->get();
+
+        $pdf = PDF::loadView('admin.jadwal.pdf_custom', ['schedules' => $schedules, 'semester' => $semester, 'kelas' => $kelas]); // Pastikan Anda mengirimkan data dalam bentuk array asosiatif
+        return $pdf->download('invoice.pdf');
+    }
+
+
+
+
+    public function jadwalMapelStore(Request $request)
+    {
+        $guruInput = Teach::where('id', $request->teachs_id)->first();
+        $guru = DB::table('jadwals')
+            ->join('teachs', 'teachs.id', '=', 'jadwals.teachs_id')
+            ->select('teachs.class_room', 'teachs.lecturers_id')
+            ->first();
+
+        if (!$guru) {
+            Jadwal::insert([
+                'teachs_id' => $request->teachs_id,
+                'days_id' => $request->days_id,
+                'times_id' => $request->times_id,
+                'rooms_id' => $request->rooms_id,
+                'status' => '0',
+
+            ]);
+
+            $notification = array(
+                'message' => 'Jadwal Inserted Successfully kode ',
+                'alert-type' => 'success'
+            );
+            return redirect()->route('jadwal.all')->with($notification);
+        }
+
+
+
+        if ($guruInput->lecturers_id == $guru->lecturers_id || $guruInput->class_room == $guru->class_room) {
+            $existingData = Jadwal::where('days_id', $request->days_id)
+                ->where('times_id', $request->times_id)
+                ->count();
+
+            if ($existingData > 0) {
+                $notification = array(
+                    'message' => 'Data Jadwal Mapel Bentrok..!!',
+                    'alert-type' => 'warning'
+                );
+                return redirect()->back()->with($notification);
+            } else {
+                Jadwal::insert([
+                    'teachs_id' => $request->teachs_id,
+                    'days_id' => $request->days_id,
+                    'times_id' => $request->times_id,
+                    'rooms_id' => $request->rooms_id,
+                    'status' => '0',
+
+                ]);
+
+                $notification = array(
+                    'message' => 'Jadwal Inserted Successfully',
+                    'alert-type' => 'success'
+                );
+                return redirect()->route('jadwal.all')->with($notification);
+            }
+        } else {
+            Jadwal::insert([
+                'teachs_id' => $request->teachs_id,
+                'days_id' => $request->days_id,
+                'times_id' => $request->times_id,
+                'rooms_id' => $request->rooms_id,
+                'status' => '0',
+
+            ]);
+
+            $notification = array(
+                'message' => 'Jadwal Inserted Successfully kode ',
+                'alert-type' => 'success'
+            );
+            return redirect()->route('jadwal.all')->with($notification);
+        }
+    }
+
+
+    public function JadwalmapelUpdate(Request $request, $id)
+    {
+        $this->validate($request, [
+            'days_id' =>  'required',
+            'times_id' => 'required',
+            'rooms_id' => 'required',
+        ]);
+
+        // Mengambil data jadwal berdasarkan $id
+        $jadwalmapel = Jadwal::find($id);
+
+        // Cek untuk memastikan tidak ada bentrok jadwal saat memperbarui
+        $existingData = Jadwal::where('days_id', $request->days_id)
+            ->where('times_id', $request->times_id)
+            ->where('id', '!=', $id) // untuk menghindari membandingkan dengan dirinya sendiri
+            ->count();
+
+        // Jika ada bentrok, kirim notifikasi
+        if ($existingData > 0) {
+            $notification = array(
+                'message' => 'Data Jadwal Mapel Bentrok ..!!',
+                'alert-type' => 'warning'
+            );
+            return redirect()->back()->with($notification);
+        }
+
+        // Lakukan pembaruan pada nilai kolom-kolom jadwal berdasarkan data yang diterima dari formulir
+        $jadwalmapel->days_id = $request->input('days_id');
+        $jadwalmapel->times_id = $request->input('times_id');
+        $jadwalmapel->rooms_id = $request->input('rooms_id');
+        // Tambahkan pembaruan lain sesuai kebutuhan Anda
+
+        // Menyimpan perubahan ke dalam database
+        $jadwalmapel->save();
+
+        $notification = array(
+            'message' => 'Jadwal  Update SuccessFully',
+            'alert-type' => 'success'
+        );
+
+        return redirect()->back()->with($notification);
     }
 }

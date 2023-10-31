@@ -67,8 +67,12 @@
             <span class="glyphicon glyphicon-download"></span> </span> <i data-lucide="printer"
                 class="w-4 h-4"></i>&nbsp;Export Excel
         </a>
+        <a href="javascript:;" data-tw-toggle="modal" data-tw-target="#pdf-modal-preview" class="btn btn-warning"> <span
+                class="glyphicon glyphicon-download"></span> </span> <i data-lucide="printer"
+                class="w-4 h-4"></i>&nbsp;Export Pdf</a>
         @if (Auth::user()->role == '3')
-            <a class="btn btn-outline-secondary btn-block ml-2" data-tw-toggle="modal" data-tw-target="#add-schedule-modal">
+            <a class="btn btn-outline-secondary btn-block ml-2" data-tw-toggle="modal"
+                data-tw-target="#tambah-schedule-modal">
                 <span class="glyphicon glyphicon-download"></span> Tambah Jadwal
             </a>
         @endif
@@ -146,7 +150,7 @@
                                                 </a>
 
                                                 <a href="javascript:;" data-tw-toggle="modal"
-                                                    data-tw-target="#edit-schedule-modal-{{ $schedule->id }}"
+                                                    data-tw-target="#ubah-schedule-modal-{{ $schedule->id }}"
                                                     class="btn btn-primary mb-2">
                                                     <i data-lucide="edit" class="w-4 h-4 mb"></i>
                                                 </a>
@@ -173,73 +177,7 @@
         </div>
     </div>
 
-    <!-- Modal Edit Jadwal -->
-    @foreach ($schedules as $schedule)
-        <div class="modal fade" id="edit-schedule-modal-{{ $schedule->id }}" tabindex="-1" role="dialog"
-            aria-labelledby="edit-schedule-modal-label-{{ $schedule->id }}" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="edit-schedule-modal-label-{{ $schedule->id }}">
-                            Edit Jadwal
-                            {{ $schedule->teach->lecturer->name }}
-                        </h5>
 
-                    </div>
-                    <div class="modal-body">
-                        <!-- Isi form edit jadwal di sini -->
-
-                        <form method="post" action="{{ route('jadwal.update', $schedule->id) }}">
-                            @csrf
-                            <!-- Field dan input form untuk mengedit data jadwal -->
-
-
-                            <div class="form-group">
-                                <label for="edit-hari">Hari</label>
-                                <select name="days_id" id="edit-hari" class="form-control w-full" required>
-                                    <option value="{{ $schedule->day->id }}">{{ $schedule->day->name_day }}</option>
-                                    @foreach ($day as $days)
-                                        <option value="{{ $days->id }}">{{ $days->name_day }}</option>
-                                    @endforeach
-
-                                </select>
-                            </div>
-                            <div class="form-group mt-2">
-                                <label for="edit-jam">Jam</label>
-                                <select name="times_id" id="edit-jam" class="form-control w-full" required>
-                                    <option value="{{ $schedule->time->id }}">{{ $schedule->time->range }}</option>
-                                    @foreach ($time as $times)
-                                        <option value="{{ $times->id }}">{{ $times->range }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="form-group mt-2">
-                                <label for="edit-ruangan">Ruangan</label>
-                                <select name="rooms_id" id="edit-ruangan" class="form-control w-full" required>
-                                    <option value="{{ $schedule->room->id }}"> {{ $schedule->room->name }}
-                                    </option>
-                                    @foreach ($room as $rooms)
-                                        <option value="{{ $rooms->id }}">{{ $rooms->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-
-                            <div class="mt-4"> <button type="button" data-tw-dismiss="modal"
-                                    class="btn btn-outline-secondary w-20 mr-1">Cancel
-                                </button>
-                                <button type="submit" class="btn btn-primary w-20">Save</button>
-                            </div>
-                            <!-- END: Modal Footer -->
-                        </form>
-
-                        <!-- Akhir form edit jadwal -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endforeach
-
-    <!-- End Modal Edit Jadwal -->
 
 
     <!-- BEGIN: Modal Kirim Jadwal All-->
@@ -296,15 +234,17 @@
 
     <!-- BEGIN: Modal Kirim Jadwal Satu-->
 
+    >
 
-    <!-- Modal Tambah Jadwal -->
 
-    <div id="add-schedule-modal" class="modal" tabindex="-1" aria-hidden="true">
+
+    <div id="pdf-modal-preview" class="modal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content">
+            <div class="modal-content"> <a data-tw-dismiss="modal" href="javascript:;"> <i data-lucide="x"
+                        class="w-8 h-8 text-slate-400"></i> </a>
                 <!-- BEGIN: Modal Header -->
                 <div class="modal-header">
-                    <h2 class="font-medium text-base mr-auto">Tambah Jadwal</h2>
+                    <h2 class="font-medium text-base mr-auto">Export Pdf Jadwal Mapel</h2>
                     <div class="dropdown sm:hidden"> <a class="dropdown-toggle w-5 h-5 block" href="javascript:;"
                             aria-expanded="false" data-tw-toggle="dropdown"> <i data-lucide="more-horizontal"
                                 class="w-5 h-5 text-slate-500"></i> </a>
@@ -315,79 +255,71 @@
                 </div> <!-- END: Modal Header -->
                 <!-- BEGIN: Modal Body -->
 
-                <form method="post" action="{{ route('jadwal.add') }}">
+                <form method="post" action="{{ route('jadwalcustom.pdf') }}">
                     @csrf
                     <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                        <div class="col-span-12 sm:col-span-6"> <label for="edit-jam">Guru</label>
-                            <select name="lecturers_id" id="lecturers_id" class="form-control w-full" required>
-                                <option value="">Pilih Guru</option>
-                                @foreach ($guru as $gurus)
-                                    <option value="{{ $gurus->id }}">{{ $gurus->name }}</option>
+                        <div class="col-span-12 sm:col-span-6"> <label for="edit-jam">Kelas </label>
+                            <select name="kelas" id="lecturers_id" class="form-control w-full" required>
+                                <option value="">Pilih Kelas</option>
+                                @php
+                                    $addedClassRooms = [];
+                                @endphp
+                                @foreach ($schedules as $key => $schedule)
+                                    @if (!in_array($schedule->teach->class_room, $addedClassRooms))
+                                        <option value="{{ $schedule->teach->class_room }}">
+                                            {{ $schedule->teach->class_room }}</option>
+                                        @php
+                                            $addedClassRooms[] = $schedule->teach->class_room;
+                                        @endphp
+                                    @endif
                                 @endforeach
                             </select>
+
                         </div>
                         <div class="col-span-12 sm:col-span-6">
-                            <label for="edit-jam">Jam</label>
-                            <select name="times_id" id="edit-jam" class="form-control w-full" required>
-                                <option value="">Pilih Jam</option>
-                                @foreach ($time as $times)
-                                    <option value="{{ $times->id }}">{{ $times->range }}</option>
+                            <label for="edit-jam">Semester </label>
+                            <select name="semester" id="edit-jam" class="form-control w-full" required>
+                                <option value="">Pilih Semester</option>
+                                @php
+                                    $addedSemesters = [];
+                                @endphp
+                                @foreach ($schedules->unique('teach.course.semester') as $schedule)
+                                    @if (!in_array($schedule->teach->course->semester, $addedSemesters))
+                                        <option value="{{ $schedule->teach->course->semester }}">
+                                            {{ $schedule->teach->course->semester }}
+                                        </option>
+                                        @php
+                                            $addedSemesters[] = $schedule->teach->course->semester;
+                                        @endphp
+                                    @endif
                                 @endforeach
                             </select>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6"> <label for="modal-form-3" class="form-label">Mata
-                                Pelajaran</label>
-                            <select name="courses_id" id="courses_id" class="form-control w-full" required>
-                                <option value="">Mata Pelajaran</option>
-                                @foreach ($course as $courses)
-                                    <option value="{{ $courses->id }}">{{ $courses->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <label for="modal-form-4" class="form-label">Hari </label>
-                            <select name="days_id" id="edit-hari" class="form-control w-full" required>
-                                <option value="">Pilih Hari</option>
-                                @foreach ($day as $days)
-                                    <option value="{{ $days->id }}">{{ $days->name_day }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <label for="edit-jam">Kelas</label>
-
-                            <input type="text" name="class_room" id="class_room" class="form-control w-full"
-                                placeholder="Masukkan kelas" required>
 
                         </div>
 
-                        <div class="col-span-12 sm:col-span-6"> <label for="edit-ruangan">Ruangan</label>
-                            <select name="rooms_id" id="edit-ruangan" class="form-control w-full" required>
-                                <option value="">Pilih Ruangan</option>
-                                @foreach ($room as $rooms)
-                                    <option value="{{ $rooms->id }}">{{ $rooms->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-span-12 sm:col-span-6">
-                            <label for="edit-jam">Tahun Kurikulum</label>
-
-                            <input type="text" name="year" id="year" class="form-control w-full"
-                                placeholder="Masukkan Tahun" required>
-
-                        </div>
                     </div> <!-- END: Modal Body -->
                     <!-- BEGIN: Modal Footer -->
-                    <div class="modal-footer"> <button type="button" data-tw-dismiss="modal"
-                            class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
-                        <button type="submit" class="btn btn-primary w-20">Save</button>
-                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary w-20">Custom</button>
                 </form>
+                <a href=" {{ route('jadwal.pdf') }}" type="button" data-tw-dismiss="modal"
+                    class="btn btn-outline-secondary w-20 mr-1">All</a>
+
+
             </div>
+            </form>
+
         </div>
     </div>
+    </div>
 
-    <!-- End Modal Tambah Jadwal -->
+
+
+
+
+
+
+
 
 
 
@@ -405,5 +337,319 @@
     </script>
 
 
+
+
+
+
+    <!-- Modal Tambah Jadwal mapel -->
+
+    <div id="tambah-schedule-modal" class="modal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="font-medium text-base mr-auto">Tambah Jadwal Mapel</h2>
+                </div>
+                <form method="post" action="{{ route('jadwalmapel.store') }}" enctype="multipart/form-data"
+                    id="myForm1">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="grid grid-cols-12 gap-4 gap-y-3 mb-4">
+                            <!-- Kode Pengampu -->
+                            <div class="col-span-12 sm:col-span-4">
+                                <div class="mb-2">
+                                    <div class="mb-2">
+                                        <label for="teachs_id">PENGAMPU</label>
+                                    </div>
+                                    <select name="teachs_id" id="teachs_id" class="tom-select w-full" required>
+                                        <optgroup>
+                                            <option value="">Pilih Kode Pengampu</option>
+                                            @foreach ($pengampu as $item)
+                                                <option value="{{ $item->id }}">
+                                                    {{ $item->gurus->name }} / {{ $item->class_room }}
+                                                </option>
+                                            @endforeach
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Tabel Data -->
+                            <div class="col-span-12">
+                                <div class="card overflow-x-auto">
+                                    <div class="card-body table-responsive">
+                                        <table id="data-table" class="table table-sm" style="width: 100%;">
+                                            <thead>
+                                                <tr>
+
+                                                    <th>Nama Guru</th>
+                                                    <th>Mata Pelajaran</th>
+                                                    <th>Kelas</th>
+                                                    <th>Jp</th>
+                                                    <th>Kurikulum</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="grid grid-cols-12 gap-4 gap-y-3 mt-8 mb-4">
+                            <!-- Waktu -->
+                            <div class="col-span-12 sm:col-span-4">
+                                <div class="mb-2">
+                                    <label for="edit-jam">Waktu</label>
+                                </div>
+                                <select name="times_id" id="times_id" class="form-control w-full" required>
+                                    <option value="">Pilih Waktu</option>
+                                    @foreach ($time as $item)
+                                        <option value="{{ $item->id }}">{{ $item->range }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Hari -->
+                            <div class="col-span-12 sm:col-span-4">
+                                <label for="modal-form-4" class="form-label">Hari</label>
+                                <select name="days_id" id="days_id" class="form-control w-full" required>
+                                    <option value="">Pilih Hari</option>
+                                    @foreach ($day as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name_day }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <!-- Ruangan -->
+                            <div class="col-span-12 sm:col-span-4">
+                                <div class="mb-2">
+                                    <label for="edit-ruangan">Ruangan</label>
+                                </div>
+                                <select name="rooms_id" id="rooms_id" class="form-control w-full" required>
+                                    <option value="">Pilih Ruangan</option>
+                                    @foreach ($room as $item)
+                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <p class="horizontal-align ml-4">
+                        <i data-lucide="alert-triangle" class="mr-1 text-danger"></i>
+                        <span class="text-danger">Pastikan data yang diinputkan benar.</span>
+                    </p>
+
+                    <div class="modal-footer">
+                        <button type="button" data-tw-dismiss="modal"
+                            class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
+                        <button type="submit" class="btn btn-primary w-20">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#myForm1').validate({
+                rules: {
+                    times_id: {
+                        required: true,
+                    },
+                    days_id: {
+                        required: true,
+                    },
+                    rooms_id: {
+                        required: true,
+                    },
+
+                },
+                messages: {
+                    times_id: {
+                        required: 'Please Enter Your Waktu',
+                    },
+                    days_id: {
+                        required: 'Please Enter Your Hari',
+                    },
+                    rooms_id: {
+                        required: 'Please Enter Your Ruangan',
+                    },
+
+
+                },
+                errorElement: 'span',
+                errorClass: 'invalid-feedback',
+                errorPlacement: function(error, element) {
+                    error.insertAfter(element);
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).addClass('is-invalid');
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass('is-invalid');
+                },
+            });
+        });
+    </script>
+
+    {{--  Scrip Menampilkan data tabel  --}}
+
+    <script>
+        // Tangkap elemen dropdown select
+        const selectElement = document.getElementById('teachs_id');
+
+        // Tambahkan event listener untuk menangani perubahan dalam dropdown
+        selectElement.addEventListener('change', function() {
+            // Ambil nilai yang dipilih dalam dropdown
+            const selectedValue = selectElement.value;
+
+            // Buat AJAX request atau manipulasi data sesuai kebutuhan Anda
+            // Di sini, kita hanya akan menambahkan data ke dalam tabel sebagai contoh
+            const tableBody = document.querySelector('#data-table tbody');
+            tableBody.innerHTML = ''; // Bersihkan isi tabel sebelum menambahkan data baru
+
+            // Loop melalui data pengampu untuk menemukan yang sesuai dengan nilai yang dipilih
+            @foreach ($pengampu as $item)
+                if ("{{ $item->id }}" === selectedValue) {
+                    const newRow = tableBody.insertRow();
+                    const cell1 = newRow.insertCell(0); // Hanya satu kolom yang perlu ditambahkan sekarang
+                    const cell2 = newRow.insertCell(1);
+                    const cell3 = newRow.insertCell(2);
+                    const cell4 = newRow.insertCell(3);
+                    const cell5 = newRow.insertCell(4);
+
+
+                    cell1.textContent = "{{ $item->gurus->name }}"; // Nama Guru (berdasarkan relasi)
+                    cell2.textContent = "{{ $item->course->name }}"; // Mata Pelajaran (berdasarkan relasi)
+                    cell3.textContent = "{{ $item->class_room }}";
+                    cell4.textContent = "{{ $item->course->jp }}"; // Jp
+                    cell5.textContent = "{{ $item->year }}"; // Kurikulum
+
+
+
+
+
+
+                }
+            @endforeach
+        });
+    </script>
+
+    <!-- End Modal Tambah Jadwal mapel -->
+
+
+
+
+
+
+    <!-- Modal Edit Jadwal mapel -->
+
+    @foreach ($schedules as $item)
+        <div class="modal fade" id="ubah-schedule-modal-{{ $item->id }}" tabindex="-1" role="dialog"
+            aria-labelledby="ubah-schedule-modal-label-{{ $item->id }}" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="font-medium text-base mr-auto">Edit Jadwal Mapel</h2>
+                    </div>
+                    <form method="post" action="{{ route('jadwalmapel.update', $item->id) }}">
+                        @csrf
+                        <div class="modal-body">
+                            <div class="grid grid-cols-12 gap-4 gap-y-3 mb-4">
+
+                                <!-- Tabel Data -->
+                                <div class="col-span-12">
+                                    <div class="card overflow-x-auto">
+                                        <div class="card-body table-responsive">
+                                            <table id="data-table1" class="table table-sm" style="width: 100%;">
+                                                <thead>
+                                                    <tr>
+
+                                                        <th>Nama Guru</th>
+                                                        <th>Mata Pelajaran</th>
+                                                        <th>Kelas</th>
+                                                        <th>Kurikulum</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @php
+                                                        $pengampuid = App\Models\Teach::find($item->teachs_id);
+                                                        $mapelid = App\Models\Course::find($pengampuid->courses_id);
+                                                        $guruid = App\Models\Lecturer::find($pengampuid->lecturers_id);
+                                                    @endphp
+
+                                                    <tr>
+
+                                                        <td> {{ $guruid->name }} </td>
+                                                        <td> {{ $mapelid->name }} </td>
+                                                        <td> {{ $pengampuid->class_room }} </td>
+                                                        <td> {{ $pengampuid->year }} </td>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="grid grid-cols-12 gap-4 gap-y-3 mt-8 mb-4">
+                                <!-- Waktu -->
+                                <div class="col-span-12 sm:col-span-4">
+                                    <div class="mb-2">
+                                        <label for="edit-jam">Waktu</label>
+                                    </div>
+                                    <select name="times_id" id="times_id" class="form-control w-full" required>
+                                        <option value="{{ $item->times_id }}">{{ $item['waktus']['range'] }}</option>
+                                        @foreach ($time as $item1)
+                                            <option value="{{ $item1->id }}">{{ $item1->range }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Hari -->
+                                <div class="col-span-12 sm:col-span-4">
+                                    <label for="modal-form-4" class="form-label">Hari</label>
+                                    <select name="days_id" id="days_id" class="form-control w-full" required>
+                                        <option value="{{ $item->days_id }}">{{ $item['haris']['name_day'] }}</option>
+                                        @foreach ($day as $item2)
+                                            <option value="{{ $item2->id }}">{{ $item2->name_day }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+
+                                <!-- Ruangan -->
+                                <div class="col-span-12 sm:col-span-4">
+                                    <div class="mb-2">
+                                        <label for="edit-ruangan">Ruangan</label>
+                                    </div>
+                                    <select name="rooms_id" id="rooms_id" class="form-control w-full" required>
+                                        <option value="{{ $item->rooms_id }}">{{ $item['ruangans']['name'] }}</option>
+                                        @foreach ($room as $item3)
+                                            <option value="{{ $item3->id }}">{{ $item3->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="horizontal-align ml-4">
+                            <i data-lucide="alert-triangle" class="mr-1 text-danger"></i>
+                            <span class="text-danger">Pastikan data yang diinputkan benar.</span>
+                        </p>
+
+                        <div class="modal-footer">
+                            <button type="button" data-tw-dismiss="modal"
+                                class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
+                            <button type="submit" class="btn btn-primary w-20">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    @endforeach
+
+
+    <!-- End Modal Edit Jadwal mapel-->
 
 @stop
